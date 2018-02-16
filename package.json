@@ -1,0 +1,26 @@
+{
+  "name": "API-Avallie",
+  "version": "1.0.0",
+  "description": "API feita para a startup Avallie",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "npm run dev"
+  },
+  "keywords": [],
+  "author": "Savisoft",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
+    "express": "^4.15.2",
+    "helmet": "^3.6.0",
+    "method-override": "^2.3.8",
+    "mm-node-logger": "0.0.1",
+    "mongoose": "^4.9.8",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.9.2",
+    "pm2": "^2.6.1",
+    "promise": "^8.0.1"
+  }
+}
