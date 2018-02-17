@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
-const requiredMsg = ' é obrigatório.';
-const maxLengthMsg = 'limite de caracteres excedido no campo ';
+const requiredMessage = ' é obrigatório.';
 
 let supplier = new mongoose.Schema({
-    cpnj: {type: String, required: [true, 'CNPJ' + requiredMsg], trim: true, maxlength: [17, maxLengthMsg + 'cnpj']},
-    socialReason : {type: String, required: [true, 'Razão social' + requiredMsg]},
-    fantasyName: {type: String, required: [true, 'Nome fantasia' + requiredMsg]},
-    responsable: {type: String, required: [true, 'Responsável' + requiredMsg]},
-    phones: {type: [String], required: [true, 'Telefone' + requiredMsg]},
-    emails: {type: [String], required: [true, 'Email' + requiredMsg]},
+    cpnj: {type: String, required: [true, 'CNPJ' + requiredMessage], unique: [true, "CNPJ ja cadastrado"], dropDubs : true},
+    socialReason : {type: String, required: [true, 'Razão social' + requiredMessage]},
+    fantasyName: {type: String, required: [true, 'Nome fantasia' + requiredMessage]},
+    responsable: {type: String, required: [true, 'Responsável' + requiredMessage]},
+    phones: {type: [String], required: [true, 'Telefone' + requiredMessage]},
+    emails: {type: [String], required: [true, 'Email' + requiredMessage]},
     address: {type:[
         {
             street: String,
             number: Number,
             city: String
         }
-    ], required: [true, 'Endereço' + requiredMsg]},
+    ], required: [true, 'Endereço' + requiredMessage]},
     urls: [String],
-    categories: {type: [String], required: [true, 'Categoria' + requiredMsg]}
+    categories: {type: [String], required: [true, 'Categoria' + requiredMessage]},
+    budgetRequests: [String]
 });
 
 module.exports = mongoose.model('Supplier', supplier);

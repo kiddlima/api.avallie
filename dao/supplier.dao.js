@@ -1,4 +1,5 @@
 const Supplier = require('../schema/supplier.schema');
+const Categorie = require('../schema/categorie.schema');
 const Promise = require('promise');
 
 let dao = {};
@@ -17,4 +18,16 @@ function addSupplier(supplier){
             reject(err);
         });
   });
+}
+
+function addCategorie(categorie){
+    return new Promise((resolve, reject) => {
+        Categorie.create(categorie)
+        .then((response) => {
+            resolve();
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
 }
