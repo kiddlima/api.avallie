@@ -5,6 +5,7 @@ const Promise = require('promise');
 let dao = {};
 
 dao.addSupplier = addSupplier;
+dao.addCategorie = addCategorie;
 
 module.exports = dao;
 

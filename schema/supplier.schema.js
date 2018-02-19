@@ -19,6 +19,6 @@ let supplier = new mongoose.Schema({
     urls: [String],
     categories: {type: [String], required: [true, 'Categoria' + requiredMessage]},
     budgetRequests: [String]
-});
+}, {versionKey: false});
 
 module.exports = mongoose.model('Supplier', supplier);

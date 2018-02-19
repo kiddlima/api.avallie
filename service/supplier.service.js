@@ -17,7 +17,6 @@ function addSupplier(supplier){
         })
         .catch((err) => {
             var response = {};
-            console.log(err)
             //CHECK IF ITS A DUPLICATED CNPJ
             if (err.name === 'MongoError' && err.code === 11000) {
                 response = appHelper.buildResponseMessage(400, "CNPJ já existe");
@@ -31,3 +30,4 @@ function addSupplier(supplier){
         });
     });
 }
+
