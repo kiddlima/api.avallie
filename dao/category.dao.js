@@ -1,21 +1,20 @@
-const Supplier = require('../schema/supplier.schema');
+const Categoriy = require('../schema/category.schema');
 const Promise = require('promise');
 
 let dao = {};
 
-dao.addSupplier = addSupplier;
+dao.addCategory = addCategory;
 
 module.exports = dao;
 
-function addSupplier(supplier){
+function addCategoriy(category){
     return new Promise((resolve, reject) => {
-        Supplier.create(supplier)
+        Category.create(category)
         .then((response) => {
             resolve();
         })
         .catch((err) => {
             reject(err);
-        });
-  });
+        })
+    })
 }
-

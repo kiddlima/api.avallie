@@ -8,6 +8,6 @@ router.get('/',function(req, res){
 });
 
 router.post('/addSupplier', supplierController.addSupplier);
-router.post('/addCategories', categoryController.addCategories);
+router.post('/addcategories', categoryController.addcategorys);
 
 module.exports = router;

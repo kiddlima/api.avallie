@@ -1,16 +1,16 @@
 const Promise = require('promise');
-const dao = require('../dao/supplier.dao');
+const dao = require('../dao/category.dao');
 const appHelper = require('../helper/api.helper')
 
 let service = {};
 
-service.addCategorie = addCategorie;
+service.addcategory = addcategory;
 
 module.exports = service;
 
-function addCategorie(categorie){
+function addCategory(category){
     return new Promise((resolve, reject) => {
-        dao.addCategorie(categorie)
+        dao.addcategory(category)
         .then(() => {
             console.log("Resolve service")
             resolve(appHelper.buildResponseMessage(200, "Categoria cadastrada com sucesso"))

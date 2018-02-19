@@ -1,21 +1,21 @@
-const categorieService = require('.././service/categorie.service');
+const categoryService = require('.././service/category.service');
 
 let controller = {}
 
-controller.addCategories = addCategories;
+controller.addcategories = addcategories;
 
 module.exports = controller;
 
-function addCategories(req, res, next){
+function addcategories(req, res, next){
     for(let i = 0; i < req.body.length; i++){
-        addCategorie(req.body[i], (result) => {
+        addcategory(req.body[i], (result) => {
             res.json(result);
         })
     }
 }
 
-function addCategorie(categorie, callback){
-    categorieService.addCategorie(categorie)
+function addcategory(category, callback){
+    categoryService.addcategory(category)
     .then((result) => {
         callback(result);
     })
