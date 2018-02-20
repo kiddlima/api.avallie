@@ -8,9 +8,15 @@ router.get('/',function(req, res){
   res.send("Hello World!");
 });
 
+//SUPPLIER 
 router.post('/addSupplier', supplierController.addSupplier);
-router.post('/addcategories', categoryController.addcategories);
-router.post('/addProducts', productController.addProducts);
 router.post('/addSuppliers', supplierController.addSuppliers);
+
+//PRODUTCS
+router.post('/addProducts', productController.addProducts);
+router.post('/getProducts', productController.getProducts);
+
+//CATEGORIES
+router.post('/addcategories', categoryController.addcategories);
 
 module.exports = router;

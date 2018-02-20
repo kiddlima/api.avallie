@@ -3,6 +3,7 @@ const Promise = require('promise');
 
 let dao = {};
 
+dao.getCategoryById = getCategoryById;
 dao.addCategory = addCategory;
 dao.getCategoryByName = getCategoryByName;
 
@@ -21,17 +22,28 @@ function addCategory(category){
 }
 
 function getCategoryByName(name){
-    console.log(name)
     return new Promise((resolve, reject) => {
         Category.findOne({
             "name": name
         })
         .then((response) => {
-            console.log("success dao")
             resolve(response);
         })
         .catch((err) => {
-            console.log("error dao")
+            reject(err);
+        })
+    })
+}
+
+function getCategoryById(id){
+    return new Promise((resolve, reject) => {
+        Category.findOne({
+            "_id": id
+        })
+        .then((response) => {
+            resolve(response);
+        })
+        .catch((err) => {
             reject(err);
         })
     })

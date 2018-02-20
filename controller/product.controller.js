@@ -4,39 +4,46 @@ const daoCategory = require('.././dao/category.dao');
 let controller = {}
 
 controller.addProducts = addProducts;
+controller.getProducts = getProducts;
 
 module.exports = controller;
 
 function addProduct(product, callback){
     productService.addProduct(product)
     .then((result) => {
-        console.log("Success" + result)
         callback(result);
     })
     .catch((err) => {
-        console.log("Fail", err)
         callback(err)
     })
 }
 
 function addProducts(req, res, next){
     for(let i = 0; i < req.body.length; i++){
-        var product = req.body[i];
-        console.log(req.body[i]);
         daoCategory.getCategoryByName(req.body[i].category)
         .then((response) => {
-            product.category = response._id;
-            
-            console.log(response)
+            req.body[i].category = response._id;
 
-            addProduct(product, (result) => {
+            console.log(req.body[i])
+
+            addProduct(req.body[i], (result) => {
                 if(i = req.body.length){
                     res.json(result)
                 }
             });
         })
         .catch((err) => {
-            product.category = "SEM CATEGORIA";
+            console.log(err);
         });
     }
+}
+
+function getProducts(req, res, next){
+    productService.getProducts(req.body)
+    .then((products) => {
+        res.json(products);
+    })
+    .catch((err) => {
+        res.json(err);
+    })
 }

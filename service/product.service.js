@@ -1,11 +1,13 @@
 const Product = require('../schema/product.schema');
 const Promise = require('promise');
 const dao = require('../dao/product.dao');
+const daoCategory = require('../dao/category.dao');
 const appHelper = require('../helper/api.helper')
 
 let service = {};
 
 service.addProduct = addProduct;
+service.getProducts = getProducts;
 
 module.exports = service;
 
@@ -20,4 +22,38 @@ function addProduct(product){
             reject(appHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
         })
     });
+}
+
+function getProducts(filter){
+    return new Promise((resolve, reject) => {
+        dao.getProducts(filter)
+        .then((products) => {
+            if(products && products.length > 0){
+                for(let i = 0; i < products.length; i++){
+
+                    daoCategory.getCategoryById(products[i].category)
+                    .then((category) => {
+                        products[i].category = category.name;
+    
+                        console.log(category);
+
+                        if(i == products.length - 1){
+                            console.log("done")
+                            resolve(products);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+                }
+            } else {
+                reject(appHelper.buildResponseMessage(400, "Não foi encontrado nenhum produto"))
+            }
+            
+        })
+        .catch((err) => {
+            //TODO TRATAR ERRO AQUI
+            reject(err);
+        })
+    })
 }
