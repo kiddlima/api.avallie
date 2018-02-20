@@ -3,6 +3,8 @@ const Promise = require('promise');
 
 let dao = {};
 
+dao.addProduct = addProduct;
+
 module.exports = dao;
 
 function addProduct(product){

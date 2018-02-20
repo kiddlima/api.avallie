@@ -4,7 +4,7 @@ const appHelper = require('../helper/api.helper')
 
 let service = {};
 
-service.addcategory = addcategory;
+service.addCategory = addCategory;
 
 module.exports = service;
 
