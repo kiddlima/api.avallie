@@ -7,3 +7,5 @@ let budgetRequest = new mongoose.Schema({
     product: {type: String, required: [true, 'Identificador do produto' + requiredMessage]},
     suppliers: [String],
 }, {versionKey: false});
+
+module.exports = mongoose.model('BudgetRequest', budgetRequest);

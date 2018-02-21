@@ -25,13 +25,18 @@ function addCategory(category){
 function getCategoryByName(name){
     return new Promise((resolve, reject) => {
         Category.findOne({
-            "name": name
+            "name": { "$regex": name, "$options": "i" }
         })
-        .then((response) => {
-            resolve(response);
+        .then((category) => {
+            if(category){
+                resolve(category);
+            } else {
+                reject("Categoria não encontrada");
+            }
+            
         })
         .catch((err) => {
-            reject(err);
+            reject("Erro no banco de dados");
         })
     })
 }
@@ -57,7 +62,7 @@ function getAllCategories(){
             resolve(response);
         })
         .catch((err) => {
-            reject(err);
+            reject("Erro no banco de dados");
         })
     })
 }

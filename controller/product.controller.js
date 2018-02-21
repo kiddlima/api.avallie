@@ -24,10 +24,8 @@ function addProducts(req, res, next){
         .then((category) => {
             if(category){
                 req.body[i].category = category._id;
-            } else {
-                console.log(req.body[i].category);
             }
-
+            
             addProduct(req.body[i], (result) => {
                 if(i = req.body.length){
                     res.json(result)

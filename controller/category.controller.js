@@ -2,7 +2,9 @@ const categoryService = require('.././service/category.service');
 
 let controller = {}
 
+controller.getCategoryByName = getCategoryByName;
 controller.addCategories = addCategories;
+controller.getAllCategories = getAllCategories;
 
 module.exports = controller;
 
@@ -23,3 +25,24 @@ function addCategory(category, callback){
         callback(err)
     })
 }
+
+function getCategoryByName(req, res, next){
+    categoryService.getCategoryByName(req.params.category)
+    .then((category) => {
+        res.json(category);
+    })
+    .catch((err) => {
+        res.json(err);
+    })
+}
+
+function getAllCategories(req, res, next){
+    categoryService.getAllCategories()
+    .then((categories) => {
+        res.json(categories)
+    })
+    .catch((err) => {
+        res.json(err)
+    })
+}
+

@@ -4,6 +4,7 @@ const Promise = require('promise');
 let dao = {};
 
 dao.addProduct = addProduct;
+dao.getProductById = getProductById;
 dao.getProducts = getProducts;
 
 module.exports = dao;
@@ -29,6 +30,21 @@ function getProducts(filter){
         .catch((err) => {
             console.log("erro mongo")
             reject(err);
+        })
+    })
+}
+
+function getProductById(id){
+    return new Promise((resolve, reject) => {
+        Product.findOne({
+            "_id": id
+        })
+        .then((product) => {
+            resolve(product)
+        })
+        .catch((err) => {
+            console.log("erro mongo")
+            reject("Erro no mongo");
         })
     })
 }
