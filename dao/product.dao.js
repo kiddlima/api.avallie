@@ -34,28 +34,9 @@ function getProducts(filter){
 }
 
 function getProductQuery(filter){
-    var query = {};
-
-    if(filter.categories && filter.unity){
-        console.log("Tem todos os filtros")
-        query = {
-            "category": {$in : filter.categories},
-            "unity": filter.unity
-        }
-    } else if(filter.categories) {
-        console.log("Tem só categoria")
-        query = {
-            "category": {$in : filter.categories}
-        }
-    } else if(filter.unity){
-        console.log("Tem só unidade")
-        query = {
-            "unity": filter.unity
-        }
-    } else {
-        console.log("Nenhum filtro")
-        query = null;
+    return  {
+        "name": filter.name ?  { "$regex": filter.name, "$options": "i" }: { $ne : filter.name},
+        "category": filter.categories ? {$in : filter.categories} : {$ne: filter.categories},
+        "unity": filter.unity ? filter.unity : {$ne: filter.unity}
     }
-
-    return query;
 }
