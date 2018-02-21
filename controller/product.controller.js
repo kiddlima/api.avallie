@@ -21,10 +21,12 @@ function addProduct(product, callback){
 function addProducts(req, res, next){
     for(let i = 0; i < req.body.length; i++){
         daoCategory.getCategoryByName(req.body[i].category)
-        .then((response) => {
-            req.body[i].category = response._id;
-
-            console.log(req.body[i])
+        .then((category) => {
+            if(category){
+                req.body[i].category = category._id;
+            } else {
+                console.log(req.body[i].category);
+            }
 
             addProduct(req.body[i], (result) => {
                 if(i = req.body.length){

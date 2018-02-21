@@ -6,6 +6,7 @@ let dao = {};
 dao.getCategoryById = getCategoryById;
 dao.addCategory = addCategory;
 dao.getCategoryByName = getCategoryByName;
+dao.getAllCategories = getAllCategories;
 
 module.exports = dao;
 
@@ -40,6 +41,18 @@ function getCategoryById(id){
         Category.findOne({
             "_id": id
         })
+        .then((response) => {
+            resolve(response);
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
+}
+
+function getAllCategories(){
+    return new Promise((resolve, reject) => {
+        Category.find({})
         .then((response) => {
             resolve(response);
         })

@@ -29,23 +29,24 @@ function getProducts(filter){
         dao.getProducts(filter)
         .then((products) => {
             if(products && products.length > 0){
-                for(let i = 0; i < products.length; i++){
 
-                    daoCategory.getCategoryById(products[i].category)
-                    .then((category) => {
-                        products[i].category = category.name;
-    
-                        console.log(category);
+                let allCategories = [];
 
+                daoCategory.getAllCategories()
+                .then((categories) => {
+                    allCategories = categories;
+                    for(let i = 0; i < products.length; i++){
+                        products[i].category = appHelper.getCategoryFromId(products[i].category, allCategories).name;
+                        
                         if(i == products.length - 1){
-                            console.log("done")
                             resolve(products);
                         }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-                }
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+                
             } else {
                 reject(appHelper.buildResponseMessage(400, "Não foi encontrado nenhum produto"))
             }

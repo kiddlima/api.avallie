@@ -10,7 +10,7 @@ module.exports = service;
 
 function addCategory(category){
     return new Promise((resolve, reject) => {
-        dao.addcategory(category)
+        dao.addCategory(category)
         .then(() => {
             resolve(appHelper.buildResponseMessage(200, "Categoria cadastrada com sucesso"))
         })

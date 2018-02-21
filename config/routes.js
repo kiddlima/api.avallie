@@ -17,6 +17,6 @@ router.post('/addProducts', productController.addProducts);
 router.post('/getProducts', productController.getProducts);
 
 //CATEGORIES
-router.post('/addcategories', categoryController.addcategories);
+router.post('/addcategories', categoryController.addCategories);
 
 module.exports = router;

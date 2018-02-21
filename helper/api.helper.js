@@ -2,6 +2,7 @@ let helper = {};
 
 helper.buildResponseMessage = buildResponseMessage;
 helper.getNewFormattedSupplier = getNewFormattedSupplier;
+helper.getCategoryFromId = getCategoryFromId;
 
 module.exports = helper;
 
@@ -27,5 +28,14 @@ function stringToArray(toBeFormattedString){
         return toBeFormattedString.split(';');
     } else {
         return [];
+    }
+}
+
+function getCategoryFromId(id, categories){
+    for(let i = 0; i < categories.length; i++){
+        if(categories[i]._id == id){
+            return categories[i];
+
+        }
     }
 }
