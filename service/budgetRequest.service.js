@@ -2,6 +2,8 @@ const daoBudgetRequest = require('.././dao/budgetRequest.dao');
 const daoSupplier = require('.././dao/supplier.dao');
 const daoProduct = require('.././dao/product.dao');
 const apiHelper = require('.././helper/api.helper');
+const emailHelper = require('.././helper/email.helper');
+const Promise = require('promise');
 
 let service = {}
 
@@ -28,8 +30,15 @@ function addBudgetRequest(budgetRequest){
                         daoBudgetRequest.addBudgetRequest(budgetRequest)
                         .then((response) => {
                             console.log("Success adding budget", response)
-                            resolve(apiHelper.buildResponseMessage(200, "Orçamento cadastrado com sucesso"));
         
+                            emailHelper.sendEmail()
+                            .then((response) => {
+                                resolve(response)
+                            })
+                            .catch((err) => {
+                                reject(err);
+                            })
+
                             //ADICIONAR ESSE ORÇAMENTO AOS FORNECEDORES E ENVIAR O EMAIL PARA OS MESMOS
                         })
                         .catch((err) => {
@@ -42,10 +51,8 @@ function addBudgetRequest(budgetRequest){
                         console.log(err)
                         reject(err)
                     });    
-            
                 })
                 .catch((err) => {
-                    console.log("error product by id")
                     reject(err)
                 })
             } else {
