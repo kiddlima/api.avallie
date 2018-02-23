@@ -5,6 +5,7 @@ let dao = {};
 
 dao.getSuppliersByCategory = getSuppliersByCategory;
 dao.addSupplier = addSupplier;
+dao.addBudgetRequestToSupplier = addBudgetRequestToSupplier;
 
 module.exports = dao;
 
@@ -36,6 +37,22 @@ function getSuppliersByCategory(category){
             console.log(err)
             reject("Erro no banco")
         })
+    })
+}
+
+function addBudgetRequestToSupplier(budgetRequestId, supplierId){
+    return new Promise((resolve, reject) => {
+        Supplier.findByIdAndUpdate(supplierId,
+            { 
+                "$push": { "budgetRequests": budgetRequestId } 
+            },
+        )
+        .then((response) => {
+            resolve(response);
+        })
+        .catch((err) => {
+            reject(err);
+        });
     })
 }
 

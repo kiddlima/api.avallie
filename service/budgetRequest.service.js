@@ -22,7 +22,7 @@ function addBudgetRequest(budgetRequest){
         if(budgetRequest.clientEmail){
             //UPDATE EMAIL ON BUDGETREQUESTTOEMAIL
             budgetResquestToEmail.clientEmail = budgetRequest.clientEmail;
-
+            budgetResquestToEmail.amount = budgetRequest.amount;
             if(budgetRequest.product){
 
                 daoProduct.getProductById(budgetRequest.product)
@@ -50,8 +50,7 @@ function addBudgetRequest(budgetRequest){
             
                         daoBudgetRequest.addBudgetRequest(budgetRequest)
                         .then((response) => {
-                            console.log("Success adding budget", response)
-
+                            
                             //ADDING MESSAGE TO RESPONSE
                             budgetRequestResponse.push("Solicitação registrada com sucesso");
 
@@ -61,7 +60,14 @@ function addBudgetRequest(budgetRequest){
                                 emailHelper.sendEmail(getToSupplierEmailInfo(budgetResquestToEmail, budgetResquestToEmail.suppliers[i].email))
                                 .then((response) => {
 
-                                    //TODO!!! UPDATE SUPPLIERS BUDGET AMOUNT
+                                    //ADDING BUDGET TO SUPPLIER
+                                    daoSupplier.addBudgetRequestToSupplier(response._id, budgetRequest.suppliers[i]._id)
+                                    .then((response) => {
+                                        console.log("Fornecedor atualizado com sucesso")
+                                    })
+                                    .catch((err) => {
+                                        console.log("Fornecedor não atualizado")
+                                    })
 
                                     if(i == budgetRequest.suppliers.length - 1){
                                         //ADDING MESSAGE TO RESPONSE
@@ -83,13 +89,10 @@ function addBudgetRequest(budgetRequest){
                                     
                                 })
                                 .catch((err) => {
-                                    console.log(err)
                                     budgetRequestResponse.push("Erro ao enviar email para fornecedores");
                                     reject(apiHelper.buildResponseMessage(400, budgetRequestResponse));
                                 })
                             }
-
-                            //ADICIONAR ESSE ORÇAMENTO AOS FORNECEDORES E ENVIAR O EMAIL PARA OS MESMOS
                         })
                         .catch((err) => {
                             console.log("error adding budget", err)
@@ -115,7 +118,6 @@ function addBudgetRequest(budgetRequest){
 }
 
 function getToSupplierEmailInfo(budgetResquestToEmail, supplierEmail){
-    console.log(supplierEmail)
     return {
         from: "vinicius@savisoft.com.br",
         to: supplierEmail,
@@ -123,6 +125,7 @@ function getToSupplierEmailInfo(budgetResquestToEmail, supplierEmail){
         text: "Nova solicitação de orçamento do produto: \n " +
         "Nome: "+ budgetResquestToEmail.product.name +
         "Unidade: " + budgetResquestToEmail.product.unity + "\n" +
+        "Quantidade: " + budgetResquestToEmail.amount + "\n" +
         "Envie o orçamento para o email: " + budgetResquestToEmail.clientEmail
         //TODO ADICIONAR HTML
     }
