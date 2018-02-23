@@ -17,20 +17,8 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-//SEND THIS MAIL OPTIONS AS SENDMAIL FUNCTION ARGUMENT
-
-// setup email data with unicode symbols
- let mailOptions = {
-    from: "vinicius@savisoft.com.br",
-    to: "kiddlima@outlook.com", // list of receivers
-    subject: 'Hello', // Subject line
-    text: 'Hello world?', // plain text body
-    html: '<b>Hello world?</b>' // html body
-}; 
-
 // send mail with defined transport object
-function sendEmail(){
-    console.log("aaaa")
+function sendEmail(mailOptions){
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
