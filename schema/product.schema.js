@@ -6,6 +6,9 @@ let product = new mongoose.Schema({
     name: {type: String, required: [true, 'Nome' + requiredMessage]},
     category: {type: String, required: [true, 'Categoria' + requiredMessage]},
     unity: {type: String}
-}, {versionKey: false});
+}, {
+    versionKey: false,
+    toObject: {virtuals: true}
+});
 
 module.exports = mongoose.model('Product', product);

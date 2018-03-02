@@ -12,6 +12,7 @@ function addBudgetRequest(req, res, next){
         res.json(response)
     })
     .catch((err) => {
+        console.log(err)
         res.json(err)
     })
 }

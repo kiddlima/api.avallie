@@ -28,7 +28,12 @@ module.exports = service;
     deadline,
 
     products[
-            id
+            {
+							id,
+							amount,
+							manufacturer,
+							observation
+						}
     ]
 
 } */
@@ -37,114 +42,178 @@ function addBudgetRequest(budgetRequest){
     let user = budgetRequest.user;
     let address = budgetRequest.address;
     let deadLine = budgetRequest.deadLine;
-    let products = budgetRequest.products;
+    var products = budgetRequest.products;
 
     return new Promise((resolve, reject) => {
-        //VALID USER
-        if(hasValidUser(user)){
-            //VALID ADDRESS
-            if(hasValidAddress(address)){
-                //VALID DEADLINE
-                if(deadLine){
-                    //VALID PRODUCTS
-                    if(hasProducts()){
-                        let matches = findMatchingProductsByCategories();
-                        
-                        /* 
-                            matches [
-                                [
-                                    {
-                                    product...
+    if(hasValidUser(user)){
+        //VALID ADDRESS
+        if(hasValidAddress(address)){
+            //VALID DEADLINE
+            if(deadLine){
+                //VALID PRODUCTS
+                if(hasProducts(products)){
 
-                                    }, 
-                                    {
-                                        product ...
-                                    }
-                                ],
-                                ... 
-                            ]
-                        */
+									//GET PRODUCTS IDS FROM PRODUCTS ARRAY
+										let productsId = [];
+										for(let i = 0; i < products.length; i++){
+											productsId.push(products[i]._id);
+										}
 
-                        for(let i = 0; i < matches.length; i++){
+                    //FILL ALL PRODUCTS WITH ITS FULL VALUES
+                    findProductsByIds(productsId)
+                    .then((fullProducts) => {
+														//FILL ALL THE PRODUCTS INFORMATION, AMOUNT, MANUFACTURER, OBSERVATION
+														
+														let productObjects = [];
 
-                            //GET SUPPLIERS FOR THOSE PROCUTS
-                            daoSupplier.getSuppliersByCategory(matches[i].category)
-                            .then((suppliers) => {
-                                //SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
+														for(let i = 0; i < fullProducts.length; i++){
+															let productObject = fullProducts[i].toObject();
 
-                                
-                            })
+															productObjects.push(productObject);
 
-                            for(let j = 0; j < matches[i].length; i++){
+															productObjects[i].amount = products[i].amount;
+															productObjects[i].manufacturer = products[i].manufacturer;
+															productObjects[i].observation = products[i].observation;
+														}
 
+														//SET FULL PRODUCT ITEM TO BUDGET REQUEST OBJECT
+														budgetRequest.products = productObjects;
 
-                                
-                                
+														//SAVE THIS BUDGET REQUEST ON DATABASE
+														daoBudgetRequest.addBudgetRequest(budgetRequest)
+														.then((response) => {	
+															//BUDGET REQUEST SAVED SUCCESFULLY
+																resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
+														})
+														.catch((err) => {
+															//FAIL TO SAVE BUDGET REQUEST
+															let error = err.errors;
+            									reject(apiHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
+														});		
+														
+														//ARRAY OF MATCHES
+														var matches = findMatchingProductsByCategories(fullProducts);
 
+														for(let i = 0; i < matches.length; i++){
+															daoSupplier.getSuppliersByCategory(matches[i][0].category)
+															.then((suppliers) => {
 
+																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
 
-                            }
+																	for(let j = 0; j < suppliers.length; j++){
+																		emailHelper.sendEmail(getToSupplierEmailInfo(budgetRequest, suppliers[j].email))
+																		.then((response) => {
+																			
+																		})
+																	}
+															})
+														}
+                    });    
+                    
+                    /* 
+                        matches [
+                            [
+                                {
+                                product...
+
+                                }, 
+                                {
+                                    product ...
+                                }
+                            ],
+                            ... 
+                        ]
+                    */
+
+/* 
+
+                    for(let i = 0; i < matches.length; i++){
+
+                        //GET SUPPLIERS FOR THOSE PROCUTS
+                        daoSupplier.getSuppliersByCategory(matches[i][0].category)
+                        .then((suppliers) => {
+                            //SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
+
+                            
+                        })
+
+                        for(let j = 0; j < matches[i].length; i++){
+
                         }
+                    } */
+ 
 
-
-                    } else {
-                        reject(apiHelper.buildResponseMessage(400, "Nenhum produto solicitado"))        
-                    }
                 } else {
-                    reject(apiHelper.buildResponseMessage(400, "Prazo de entrega inválido ou não informado"))    
+                    reject(apiHelper.buildResponseMessage(400, "Nenhum produto solicitado"))        
                 }
             } else {
-                reject(apiHelper.buildResponseMessage(400, "Endereço inválido ou não informado"))
+                reject(apiHelper.buildResponseMessage(400, "Prazo de entrega inválido ou não informado"))    
             }
         } else {
-            reject(apiHelper.buildResponseMessage(400, "Usuário inválido ou não informado"))
+            reject(apiHelper.buildResponseMessage(400, "Endereço inválido ou não informado"))
         }
-    });
+    } else {
+        reject(apiHelper.buildResponseMessage(400, "Usuário inválido ou não informado"))
+    }
+});
+}
+
+function findProductsByIds(products){
+    return new Promise((resolve, reject) => {
+        for(let i = 0; i < products.length; i++){
+            daoProduct.getProductById(products[i])
+            .then((product) => {
+                //FILL PRODUCT WITH ITS FULL INFORMATION
+                products[i] = product;
+
+                if(i == products.length - 1){
+                    resolve(products);
+                }
+            });
+        }
+    })
+    
 }
 
 function findMatchingProductsByCategories(products){
-
     //LIST THAT WILL BE RETURNED WITH FULL MATCHES OBJECTS
+    let matchesList = [];
 
-    let groupedProductsBasedOnMatches = [];
     for(let i = 0; i < products.length; i++){
-        //FILLED PRODUCT
-        let fullProduct;
+        
+        for(let j = 0; j < products.length; j++){
+            if(thisProductIsNotMatchedYet(products[i], matchesList)){
+            //IF IS NOT THE SAME PRODUT
+                if(products[i]._id != products[j]._id){
+										//TRY TO ADD TO EXISTING MATCH ARRAY
+										if(tryToAddToExistingMatchArray(products[i], matchesList)){
+												//WAS ADDED TO EXISTING MATCH ARRAY
+										} else if(products[i].category == products[j].category) {
+												//THIS MATCH DOES NOT EXIST YET
+												let newMatchArray = [
+														products[i],
+														products[j]
+												]
 
-        daoProduct.getProductById(products[i])
-        .then((product) => {
-            //FILL PRODUCT WITH ITS FULL INFORMATION
-            fullProduct = product;
-
-            if(thisProductIsNotMatchedYet()){
-                for(let j = 0; j < products.length; j++){
-                    if(fullProduct._id == products[j]._id){
-                        if(tryToAddToExistingMatchArray(fullProduct, groupedProductsBasedOnMatches)){
-                            //WAS ADDED TO EXISTING MATCH ARRAY
-                        } else {
-                            //THIS MATCH DOES NOT EXIST YET
-                            let newMatchArray = [
-                                fullProduct,
-                                products[j]
-                            ]
-
-                            //ADD NEW MATCH TO THE LIST
-                            groupedProductsBasedOnMatches.push(newMatchArray);                            
-                        }
-                    }
+												//ADD NEW MATCH TO THE LIST
+												matchesList.push(newMatchArray);                            
+										} else {
+											//NO MATCH FOR THIS GUY, ADD A SINGLE MATCH PRODUCT 		
+											matchesList.push([products[i]]);
+										}
                 }
             }
-        });
-    }
-
-    return groupedProductsBasedOnMatches;
+        }
+		}
+		
+    return matchesList;
 }
 
 function tryToAddToExistingMatchArray(fullProduct, matches){
     for(let i = 0; i < matches.length; i++){
-        if(matches[i].category == fullProduct.category){
+        if(matches[i][0].category == fullProduct.category){
             //THERE'S ALREADY A MATCH ARRAY FOR THIS CATEGORY
-
+            
             //ADD THIS PRODUCT TO THIS ARRAY
             matches[i].push(fullProduct);
 
@@ -189,10 +258,12 @@ function hasValidUser(user){
 function hasValidAddress(address){
     if(!hasValidField(address.address)){
         return false;
-    } else if(address.number){
+    } else if(!address.number){
         return false
     } else if(!hasValidField(address.city)){
         return false;
+    } else {
+        return true;
     } 
 }
 
@@ -200,7 +271,7 @@ function hasValidField(field){
     return field && field.length > 0;
 }
 
-function addBudgetRequest(budgetRequest){
+/* function addBudgetRequest(budgetRequest){
     // RESPONSE WITH ALL THE MESSAGES
     var budgetRequestResponse = [];
 
@@ -306,8 +377,8 @@ function addBudgetRequest(budgetRequest){
     }
     
 }
-
-function getToSupplierEmailInfo(budgetResquestToEmail, supplierEmail){
+ */
+function getToSupplierEmailInfo(budgetRequest, supplierEmail){
     return {
         from: "vinicius@savisoft.com.br",
         to: supplierEmail,
