@@ -9,10 +9,11 @@ module.exports = controller;
 function addBudgetRequest(req, res, next){
     budgetRequestService.addBudgetRequest(req.body)
     .then((response) => {
+        res.status(200);
         res.json(response)
     })
     .catch((err) => {
-        console.log(err)
+        res.status(400);
         res.json(err)
     })
 }
