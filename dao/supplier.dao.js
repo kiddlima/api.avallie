@@ -45,7 +45,7 @@ function addBudgetRequestToSupplier(budgetRequestId, supplierId){
         Supplier.findByIdAndUpdate(supplierId,
             { 
                 "$push": { "budgetRequests": budgetRequestId } 
-            },
+            }
         )
         .then((response) => {
             resolve(response);
