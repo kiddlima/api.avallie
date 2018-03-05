@@ -53,15 +53,15 @@ function addBudgetRequest(budgetRequest){
                 //VALID PRODUCTS
                 if(hasProducts(products)){
 
-									//GET PRODUCTS IDS FROM PRODUCTS ARRAY
-										let productsId = [];
-										for(let i = 0; i < products.length; i++){
-											productsId.push(products[i]._id);
-										}
+                    //GET PRODUCTS IDS FROM PRODUCTS ARRAY
+                        let productsId = [];
+                        for(let i = 0; i < products.length; i++){
+                            productsId.push(products[i]._id);
+                        }
 
-                    //FILL ALL PRODUCTS WITH ITS FULL VALUES
-                    findProductsByIds(productsId)
-                    .then((fullProducts) => {
+                        //FILL ALL PRODUCTS WITH ITS FULL VALUES
+                        findProductsByIds(productsId)
+                        .then((fullProducts) => {
 														//FILL ALL THE PRODUCTS INFORMATION, AMOUNT, MANUFACTURER, OBSERVATION
 														
 														let productObjects = [];
@@ -97,6 +97,8 @@ function addBudgetRequest(budgetRequest){
 														for(let i = 0; i < matches.length; i++){
 															daoSupplier.getSuppliersByCategory(matches[i][0].category)
 															.then((suppliers) => {
+
+																var groupedMatches = groupMatchesBySupplier(matches, suppliers);
 
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
 
@@ -156,6 +158,56 @@ function addBudgetRequest(budgetRequest){
         reject(apiHelper.buildResponseMessage(400, "Usuário inválido ou não informado"))
     }
 });
+}
+
+function groupMatchesBySupplier(matches, suppliers){
+	//ADICIONAR O ID DO SUPPLIER NA PRIMEIRA POSIÇÃO DOS MATCHES
+	//DEPOIS DISSO, VERFICAR CASO SEJAM IGUAIS, CASO SEJAM, UNIR ARRAYS EM 1 SÓ
+
+	let matchXSupplier = [];
+
+/*
+matcheXSupplier[
+	{
+		matchIndex: 0;
+		supplierIndex = index;
+	}
+]
+
+ */
+
+	for(let i = 0; i < matches.length; i++){
+		for(let j = 0; j < suppliers.length; j++){
+			for(let k = 0; k < suppliers.categories.length; k++){
+				if(matches[i][0].category == suppliers.categories[k]){
+					//THIS SUPPLIER WORKS WITH THIS MATCH ARRAY
+
+					matchXSupplier.push({
+						matchIndex = i,
+						supplierIndex = j
+					});		
+				}
+			}
+		}
+	}
+
+for(let i = 0; i < matchXSupplier.length; i++){
+	for(let j = 0; j < matchXSupplier.length; j++){
+		//IF THIS MATCH HAS THE SAME SUPPLIER AND IT IS NOT THE SAME MATCH
+		if(matchXSupplier[i].supplierIndex == matchXSupplier[j].supplierIndex && i != j){
+			//GROUP i AND j MATCHES
+
+			//RUN ONE OF THE FOUND MATCHES AND THEN ADD ALL OF ITS VALUES TO THE OTHER MATCHE, THEN POP IT UP
+			for(let k = 0; k < matches[j].length; k++){
+				matches[i].push(matches[j][k]);
+				matches[j].pop(matches[j][k]);
+			}
+		}
+	}
+}
+
+return matches;
+
 }
 
 function findProductsByIds(products){
