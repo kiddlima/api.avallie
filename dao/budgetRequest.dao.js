@@ -10,7 +10,7 @@ module.exports = dao;
 function addBudgetRequest(budgetRequest){
     return new Promise((resolve, reject) => {
         BudgetRequest.create(budgetRequest)
-        .then((response) => {
+        .then((response) => {   
             resolve(response);
         })
         .catch((err) => {

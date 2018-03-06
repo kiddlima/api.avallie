@@ -3,7 +3,7 @@ const Promise = require('promise');
 
 let dao = {};
 
-dao.getSuppliersByCategory = getSuppliersByCategory;
+dao.getSuppliersByCategories = getSuppliersByCategories;
 dao.addSupplier = addSupplier;
 dao.addBudgetRequestToSupplier = addBudgetRequestToSupplier;
 
@@ -21,10 +21,10 @@ function addSupplier(supplier){
   });
 }
 
-function getSuppliersByCategory(category){
+function getSuppliersByCategories(categories){
     return new Promise((resolve, reject) => {
         Supplier.find({
-            "categories": category
+            "categories": { $elemMatch: {$in: categories }}
         })
         .then((suppliers) => {
             if(suppliers && suppliers.length > 0){
@@ -34,7 +34,6 @@ function getSuppliersByCategory(category){
             }
         })
         .catch((err) => {
-            console.log(err)
             reject("Erro no banco")
         })
     })

@@ -82,8 +82,40 @@ function addBudgetRequest(budgetRequest){
 														//SAVE THIS BUDGET REQUEST ON DATABASE
 														daoBudgetRequest.addBudgetRequest(budgetRequest)
 														.then((response) => {	
+
 															//BUDGET REQUEST SAVED SUCCESFULLY
-																resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
+															resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
+															
+															budgetRequest = response;
+
+															var matches = findMatchingProductsByCategories(fullProducts);
+
+														//ARRAY OF CATEGORIES
+														var categories = getCategoriesFromMatches(matches);
+														daoSupplier.getSuppliersByCategories(categories)
+															.then((suppliers) => {
+																//ARRAY OF MATCHES
+																var groupedMatches = groupMatchesBySupplier(matches, suppliers);
+
+																for(let j = 0; j < groupedMatches.length; j++){
+																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
+																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0].emails[0], budgetRequest._id))
+																	.then((response) => {
+
+																		if(j == groupedMatches.length - 1){
+																			//SEND EMAIL TO USER
+																			resolve(response);
+																		}
+																	})
+																	.catch((err) => {
+																		reject(err);
+																	})	
+																}
+														})
+														.catch((err) => {
+															console.log(err)
+														})
+																
 														})
 														.catch((err) => {
 															//FAIL TO SAVE BUDGET REQUEST
@@ -91,60 +123,10 @@ function addBudgetRequest(budgetRequest){
             									reject(apiHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
 														});		
 														
-														//ARRAY OF MATCHES
-														var matches = findMatchingProductsByCategories(fullProducts);
-
-														for(let i = 0; i < matches.length; i++){
-															daoSupplier.getSuppliersByCategory(matches[i][0].category)
-															.then((suppliers) => {
-
-																var groupedMatches = groupMatchesBySupplier(matches, suppliers);
-
-																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
-
-																	for(let j = 0; j < suppliers.length; j++){
-																		emailHelper.sendEmail(getToSupplierEmailInfo(budgetRequest, suppliers[j].email))
-																		.then((response) => {
-																			
-																		})
-																	}
-															})
-														}
+														
+														
                     });    
                     
-                    /* 
-                        matches [
-                            [
-                                {
-                                product...
-
-                                }, 
-                                {
-                                    product ...
-                                }
-                            ],
-                            ... 
-                        ]
-                    */
-
-/* 
-
-                    for(let i = 0; i < matches.length; i++){
-
-                        //GET SUPPLIERS FOR THOSE PROCUTS
-                        daoSupplier.getSuppliersByCategory(matches[i][0].category)
-                        .then((suppliers) => {
-                            //SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
-
-                            
-                        })
-
-                        for(let j = 0; j < matches[i].length; i++){
-
-                        }
-                    } */
- 
-
                 } else {
                     reject(apiHelper.buildResponseMessage(400, "Nenhum produto solicitado"))        
                 }
@@ -160,53 +142,56 @@ function addBudgetRequest(budgetRequest){
 });
 }
 
-function groupMatchesBySupplier(matches, suppliers){
-	//ADICIONAR O ID DO SUPPLIER NA PRIMEIRA POSIÇÃO DOS MATCHES
-	//DEPOIS DISSO, VERFICAR CASO SEJAM IGUAIS, CASO SEJAM, UNIR ARRAYS EM 1 SÓ
-
-	let matchXSupplier = [];
-
-/*
-matcheXSupplier[
-	{
-		matchIndex: 0;
-		supplierIndex = index;
-	}
-]
-
- */
+function getCategoriesFromMatches(matches){
+	var categories = [];
 
 	for(let i = 0; i < matches.length; i++){
-		for(let j = 0; j < suppliers.length; j++){
-			for(let k = 0; k < suppliers.categories.length; k++){
-				if(matches[i][0].category == suppliers.categories[k]){
-					//THIS SUPPLIER WORKS WITH THIS MATCH ARRAY
-
-					matchXSupplier.push({
-						matchIndex = i,
-						supplierIndex = j
-					});		
-				}
-			}
-		}
+		categories.push(matches[i][0].category);
 	}
 
-for(let i = 0; i < matchXSupplier.length; i++){
-	for(let j = 0; j < matchXSupplier.length; j++){
-		//IF THIS MATCH HAS THE SAME SUPPLIER AND IT IS NOT THE SAME MATCH
-		if(matchXSupplier[i].supplierIndex == matchXSupplier[j].supplierIndex && i != j){
-			//GROUP i AND j MATCHES
-
-			//RUN ONE OF THE FOUND MATCHES AND THEN ADD ALL OF ITS VALUES TO THE OTHER MATCHE, THEN POP IT UP
-			for(let k = 0; k < matches[j].length; k++){
-				matches[i].push(matches[j].pop());
-			}
-		}
-	}
+	return categories;
 }
 
-return matches;
+function groupMatchesBySupplier(matches, suppliers){
 
+/* thisSupplierProducts[
+		{
+			supplier object
+		},
+		{
+			product
+		},
+		{
+			product
+		},
+		{
+			product
+		},
+		....
+] */
+
+	var allSupplierProducts = [];
+
+	for(let i = 0; i < suppliers.length; i++){
+		var thisSupplierProducts = [];
+
+		thisSupplierProducts.push(suppliers[i]);
+		for(let j = 0; j < matches.length; j++){
+				for(let k = 0; k < suppliers[i].categories.length; k++){
+					if(matches[j][0].category == suppliers[i].categories[k]){
+						//THIS MATCH ARRAY IS FROM THIS SUPPLIERS CATEGORY, SO ADD ALL OF THIS PRODUCTS 
+						for(let l = 0; l < matches[j].length; l++){
+							thisSupplierProducts.push(matches[j][l]);
+						}
+					}
+				}
+		}
+
+		allSupplierProducts.push(thisSupplierProducts);
+	}
+
+
+	return allSupplierProducts;
 }
 
 function findProductsByIds(products){
@@ -429,16 +414,21 @@ function hasValidField(field){
     
 }
  */
-function getToSupplierEmailInfo(budgetRequest, supplierEmail){
+function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
+		var body = "";
+
+		body += "Produtos solicitados: \n"; 
+		//STARTS IN 1 BECAUSE 0 IS THE SUPPLIER
+		for(let i = 1; i < products.length; i++){
+			body += products[i].name + " \n"
+		}
+
     return {
         from: "vinicius@savisoft.com.br",
         to: supplierEmail,
-        subject: "Solicitação de orçamento Avallie",
-        text: "Nova solicitação de orçamento do produto: \n " +
-        "Nome: "+ budgetResquestToEmail.product.name +
-        "Unidade: " + budgetResquestToEmail.product.unity + "\n" +
-        "Quantidade: " + budgetResquestToEmail.amount + "\n" +
-        "Envie o orçamento para o email: " + budgetResquestToEmail.clientEmail
+        subject: "Solicitação de orçamento Avallie: " + budgetRequestId,
+        text: body + 
+        "Envie o orçamento para o email: comercial@avallie.com"
         //TODO ADICIONAR HTML
     }
 }

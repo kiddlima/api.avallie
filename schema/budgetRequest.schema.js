@@ -25,7 +25,11 @@ let budgetRequest = new mongoose.Schema({
             manufacturer: String,
             observation: String
         }
-    ]
-}, {versionKey: false});
+    ],
+    
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
 module.exports = mongoose.model('BudgetRequest', budgetRequest);

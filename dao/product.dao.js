@@ -23,7 +23,12 @@ function addProduct(product){
 
 function getProducts(filter){
     return new Promise((resolve, reject) => {
-        Product.find(getProductQuery(filter))
+        Product.find(
+            getProductQuery(filter), null,
+            {
+                sort: {name: 1}
+            }
+        )
         .then((products) => {
             resolve(products)
         })
