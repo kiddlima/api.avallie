@@ -199,8 +199,7 @@ for(let i = 0; i < matchXSupplier.length; i++){
 
 			//RUN ONE OF THE FOUND MATCHES AND THEN ADD ALL OF ITS VALUES TO THE OTHER MATCHE, THEN POP IT UP
 			for(let k = 0; k < matches[j].length; k++){
-				matches[i].push(matches[j][k]);
-				matches[j].pop(matches[j][k]);
+				matches[i].push(matches[j].pop());
 			}
 		}
 	}
