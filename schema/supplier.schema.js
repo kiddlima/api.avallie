@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const requiredMessage = ' é obrigatório.';
 
 let supplier = new mongoose.Schema({
-    cnpj: {type: String, dropDubs : false},
+    cnpj: String,
     socialReason : String,
     fantasyName: String,
     responsable: String,
