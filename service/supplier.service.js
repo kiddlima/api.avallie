@@ -77,13 +77,11 @@ function addFormatedSuppliers(suppliers){
             dao.addSupplier(suppliers[i])
             .then((result) => {
                 if(i == suppliers.length - 1){
-                    resolve(suppliers.length + " fornecedores cadastrados");
+                    resolve(i + " fornecedores cadastrados \n Tamanho do array de suppliers: " + suppliers.length);
                 }
             })
             .catch((err) => {
-                if(i == suppliers.length - 1){
-                    reject(err);
-                }
+                reject(err);
             });
         }
     })
