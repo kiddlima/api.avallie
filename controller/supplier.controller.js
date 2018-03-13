@@ -20,40 +20,11 @@ function addSupplier(req, res, next){
 }
 
 function addSuppliers(req, res, next){
-    for(let i = 0; i < req.body.length; i++){
-        var supplier = appHelper.getNewFormattedSupplier(req.body[i]);
-
-        //AUX ARRAY TO CATEGORIES
-        var categoriesIDs = [];
-
-        for(let j = 0; j < supplier.categories.length; j++){
-            daoCategory.getCategoryByName(supplier.categories[j])
-            .then((result) => {
-                categoriesIDs.push(result._id);
-
-                //FINISHED TO FILL CATEGORIES
-                if(j == supplier.categories.length - 1){
-                    
-                    supplier.categories = categoriesIDs;
-
-                    //ADD NEW FORMATED SUPPLIER
-                    supplierService.addSupplier(supplier)
-                    .then((result) => {
-                        if(i == req.body.length - 1){
-                            res.json(result);
-                        }
-                    })
-                    .catch((err) => {
-                        if(i == req.body.length - 1){
-                            res.json(err);
-                        }
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        }
-        
-    }
+    supplierService.addSuppliers(req.body)
+    .then((result) => {
+        res.json(result);
+    })
+    .catch((err) => {
+        res.json(err);
+    });
 }

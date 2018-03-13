@@ -4,7 +4,7 @@ let config = {};
 
 //quando servidor for pra producao ou hml trocar variavel abaixo para production
 //quando servidor for local, usar development
-config.environment = process.env.NODE_ENV || 'production';
+config.environment = process.env.NODE_ENV || 'development';
 
 // Preencher o BD com amostras, se for necessário
 config.seedDB = false;
