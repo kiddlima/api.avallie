@@ -84,7 +84,7 @@ function addBudgetRequest(budgetRequest){
 														.then((response) => {	
 
 															//BUDGET REQUEST SAVED SUCCESFULLY
-															resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
+															//resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
 															
 															budgetRequest = response;
 
@@ -104,7 +104,13 @@ function addBudgetRequest(budgetRequest){
 
 																		if(j == groupedMatches.length - 1){
 																			//SEND EMAIL TO USER
-																			resolve(response);
+																			emailHelper.sendEmail(getToClientEmailInfo(budgetRequest, groupedMatches.length))
+																			.then((response) => {
+																				resolve(response);
+																			})
+																			.catch((err) => {
+																				reject(err);
+																			})
 																		}
 																	})
 																	.catch((err) => {
@@ -181,7 +187,9 @@ function groupMatchesBySupplier(matches, suppliers){
 					if(matches[j][0].category == suppliers[i].categories[k]){
 						//THIS MATCH ARRAY IS FROM THIS SUPPLIERS CATEGORY, SO ADD ALL OF THIS PRODUCTS 
 						for(let l = 0; l < matches[j].length; l++){
-							thisSupplierProducts.push(matches[j][l]);
+							if(!thisProductIsInThisArrayAlready(matches[j][l]._id, thisSupplierProducts)){
+								thisSupplierProducts.push(matches[j][l]);
+							}
 						}
 					}
 				}
@@ -192,6 +200,16 @@ function groupMatchesBySupplier(matches, suppliers){
 
 
 	return allSupplierProducts;
+}
+
+function thisProductIsInThisArrayAlready(productId, array){
+	for(let i = 0; i < array.length; i++){
+		if(productId == array[i]._id){
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function findProductsByIds(products){
@@ -307,113 +325,6 @@ function hasValidField(field){
     return field && field.length > 0;
 }
 
-/* function addBudgetRequest(budgetRequest){
-    // RESPONSE WITH ALL THE MESSAGES
-    var budgetRequestResponse = [];
-
-    //USED TO GET INFOS THAT WILL BE SEND ON THE EMAILS
-    var budgetResquestToEmail = [];
-
-    for(let i = 0; i < budgetRequest.length; i++){
-        if(budgetRequest.clientEmail){
-            //UPDATE EMAIL ON BUDGETREQUESTTOEMAIL
-            budgetResquestToEmail.clientEmail = budgetRequest.clientEmail;
-            budgetResquestToEmail.amount = budgetRequest.amount;
-            if(budgetRequest.product){
-    
-                daoProduct.getProductById(budgetRequest.product)
-                .then((product) => {
-                    //UPDATING BUDGET REQUEST PRODUCT ID
-                    budgetRequest.product = product._id;
-    
-                    //UPDATING BUDGET REQUEST TO EMAIL PRODUCT
-                    budgetResquestToEmail.product = product;
-            
-                    daoSupplier.getSuppliersByCategory(product.category)
-                    .then((suppliers) => {
-                        budgetRequest.suppliers = [];
-                        for(let i = 0; i < suppliers.length; i++){
-                            //UPDATE BUGET REQUEST SUPPLIERS ID
-                            budgetRequest.suppliers.push(suppliers[i]._id);
-    
-                            //ADD SUPPLIERS EMAIL TO EMAILS AUX ARRAY
-                            budgetResquestToEmail.suppliers = [];
-                            budgetResquestToEmail.suppliers.push({
-                                "_id": suppliers[i]._id,
-                                "email": suppliers[i].emails[i]
-                            });
-                        }
-            
-                        daoBudgetRequest.addBudgetRequest(budgetRequest)
-                        .then((response) => {
-                            
-                            //ADDING MESSAGE TO RESPONSE
-                            budgetRequestResponse.push("Solicitação registrada com sucesso");
-    
-                            for(let i = 0; i < budgetRequest.suppliers.length; i++){
-    
-                                //SEND EMAIL TO SUPPLIERS
-                                emailHelper.sendEmail(getToSupplierEmailInfo(budgetResquestToEmail, budgetResquestToEmail.suppliers[i].email))
-                                .then((response) => {
-    
-                                    //ADDING BUDGET TO SUPPLIER
-                                    daoSupplier.addBudgetRequestToSupplier(response._id, budgetRequest.suppliers[i]._id)
-                                    .then((response) => {
-                                        console.log("Fornecedor atualizado com sucesso")
-                                    })
-                                    .catch((err) => {
-                                        console.log("Fornecedor não atualizado")
-                                    })
-    
-                                    if(i == budgetRequest.suppliers.length - 1){
-                                        //ADDING MESSAGE TO RESPONSE
-                                        budgetRequestResponse.push("Solicitação enviada para " + budgetRequest.suppliers.length + " fornecedores");
-    
-                                        //SEND EMAIL TO CLIENT
-                                        emailHelper.sendEmail(getToClientEmailInfo(budgetResquestToEmail))
-                                        .then((response) => {
-                                            //ADDING MESSAGE TO RESPONSE
-                                            budgetRequestResponse.push("Enviamos um email para " + budgetRequest.clientEmail + " com as informações de sua solicitação");
-    
-                                        //    resolve(apiHelper.buildResponseMessage(200, budgetRequestResponse));
-                                        })
-                                        .catch((err) => {
-                                            budgetRequestResponse.push("Erro ao enviar email solicitante");
-                                        //    reject(apiHelper.buildResponseMessage(400, budgetRequestResponse));
-                                        })
-                                    }
-                                    
-                                })
-                                .catch((err) => {
-                                    budgetRequestResponse.push("Erro ao enviar email para fornecedores");
-                              //      reject(apiHelper.buildResponseMessage(400, budgetRequestResponse));
-                                })
-                            }
-                        })
-                        .catch((err) => {
-                            console.log("error adding budget", err)
-                            let error = err.errors;
-                            //resolve(apiHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
-                        })
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                        //reject(err)
-                    });    
-                })
-                .catch((err) => {
-                    //reject(err)
-                })
-            } else {
-                //reject(apiHelper.buildResponseMessage(400, "Produto não informado"))
-            }
-        } else {
-            //reject(apiHelper.buildResponseMessage(400, "Email do cliente não informado"))
-        }
-    }
-    
-}
- */
 function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
 		var body = "";
 
@@ -424,7 +335,7 @@ function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
 		}
 
     return {
-        from: "vinicius@savisoft.com.br",
+        from: "comercial@avallie.com",
         to: supplierEmail,
         subject: "Solicitação de orçamento Avallie: " + budgetRequestId,
         text: body + 
@@ -433,13 +344,20 @@ function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
     }
 }
 
-function getToClientEmailInfo(budgetResquestToEmail){
+function getToClientEmailInfo(budgetRequest, suppliersLenght){
+	var products = "\n";
+
+	for(let i = 0; i < budgetRequest.products; i++){
+		products += budgetRequest.products[i].name + "\n";
+	}
+
     return {
-        from: "vinicius@savisoft.com.br",
-        to: budgetResquestToEmail.clientEmail,
-        subject: "Solicitação de orçamento Avallie",
-        text: "Sua solicitação de orçamento do produto" +
-        budgetResquestToEmail.product.name + "foi enviado para " +
-        budgetResquestToEmail.suppliers.length + " fornecedores"
+        from: "comercial@avallie.com",
+        to: budgetRequest.user.email,
+        subject: "Solicitação de orçamento Avallie " + budgetRequest._id,
+        text: "Sua solicitação de orçamento para os produtos: " +
+				products
+				+ "Foi enviado para " +
+        suppliersLenght + " fornecedores"
     }
 }
