@@ -99,7 +99,7 @@ function addBudgetRequest(budgetRequest){
 
 																for(let j = 0; j < groupedMatches.length; j++){
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
-																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0].emails[0], budgetRequest._id))
+																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id))
 																	.then((response) => {
 
 																		if(j == groupedMatches.length - 1){
@@ -325,10 +325,10 @@ function hasValidField(field){
     return field && field.length > 0;
 }
 
-function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
+function getToSupplierEmailInfo(products, supplier, budgetRequestId){
 		var body = "";
 
-		body += "Produtos solicitados: \n"; 
+		body += "Olá, "+ supplier.fantasyName +"\n Produtos solicitados: \n"; 
 		//STARTS IN 1 BECAUSE 0 IS THE SUPPLIER
 		for(let i = 1; i < products.length; i++){
 			body += products[i].name + " \n"
@@ -336,7 +336,7 @@ function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
 
     return {
         from: "comercial@avallie.com",
-        to: supplierEmail,
+        to: supplier.emails[0],
         subject: "Solicitação de orçamento Avallie: " + budgetRequestId,
         text: body + 
         "Envie o orçamento para o email: comercial@avallie.com"
