@@ -6,6 +6,7 @@ let dao = {};
 dao.getSuppliersByCategories = getSuppliersByCategories;
 dao.addSupplier = addSupplier;
 dao.addSuppliers = addSuppliers;
+dao.updateBudgetRequests = updateBudgetRequests;
 dao.addBudgetRequestToSupplier = addBudgetRequestToSupplier;
 
 module.exports = dao;
@@ -20,6 +21,21 @@ function addSupplier(supplier){
             reject(err);
         });
   });
+}
+
+function updateBudgetRequests(idSupplier, budgetRequest){
+    return new Promise((resolve, reject) => {
+        Supplier.update(
+            { _id: idSupplier}, 
+            {$push: {'budgetRequests': budgetRequest}}
+        )
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
 }
 
 function getSuppliersByCategories(categories){

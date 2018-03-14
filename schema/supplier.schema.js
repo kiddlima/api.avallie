@@ -15,7 +15,32 @@ let supplier = new mongoose.Schema({
     address: [String],
     urls: [String],
     categories: {type: [String], required: [true, 'Categoria' + requiredMessage]},
-    budgetRequests: [String]
+    budgetRequests: [{
+        budgetRequest_id: String,
+        user:{
+            name: String,
+            email: String,
+            cpf: String,
+            phone: String,
+        },
+        address: {
+            address: String,
+            number: Number,
+            city: String
+        },
+        deadLine: Date,
+        products:[
+            {
+                _id: {type: String, required: [true, 'Id' + requiredMessage]},
+                name: {type: String, required: [true, 'Nome' + requiredMessage]},
+                category: {type: String, required: [true, 'Categoria' + requiredMessage]},
+                unity: {type: String},
+                amount: Number,
+                manufacturer: String,
+                observation: String
+            }
+        ],
+    }]
 }, {versionKey: false});
 
 module.exports = mongoose.model('Supplier', supplier);

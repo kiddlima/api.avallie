@@ -84,7 +84,7 @@ function addBudgetRequest(budgetRequest){
 														.then((response) => {	
 
 															//BUDGET REQUEST SAVED SUCCESFULLY
-															//resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
+															resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
 															
 															budgetRequest = response;
 
@@ -107,6 +107,9 @@ function addBudgetRequest(budgetRequest){
 																			emailHelper.sendEmail(getToClientEmailInfo(budgetRequest, groupedMatches.length))
 																			.then((response) => {
 																				resolve(response);
+
+																				addThisBudgetRequestToTheSuppliers(groupedMatches, budgetRequest);
+
 																			})
 																			.catch((err) => {
 																				reject(err);
@@ -129,8 +132,6 @@ function addBudgetRequest(budgetRequest){
             									reject(apiHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
 														});		
 														
-														
-														
                     });    
                     
                 } else {
@@ -146,6 +147,35 @@ function addBudgetRequest(budgetRequest){
         reject(apiHelper.buildResponseMessage(400, "Usuário inválido ou não informado"))
     }
 });
+}
+
+function addThisBudgetRequestToTheSuppliers(matches, budgetRequest){
+	for(let i = 0; i < matches.length; i++){
+		let formattedBudgetRequest = getFormatedBudgetRequestFromMatch(matches[i], budgetRequest);
+
+		daoSupplier.updateBudgetRequests(matches[i][0].id, formattedBudgetRequest)
+		.then((result) => {
+				console.log(result);
+		})
+		.catch((err) => {
+			console.log(err);
+		})
+	}
+}
+
+function getFormatedBudgetRequestFromMatch(match, budgetRequest){
+	var products = [];
+	for(let i = 1; i < match.length; i++){
+		products.push(match[i]);
+	}
+
+	return {
+		budgetRequest_id: budgetRequest.id,
+		user: budgetRequest.user,
+		address: budgetRequest.address,
+		deadline: budgetRequest.deadLine,
+		products: products
+	}
 }
 
 function getCategoriesFromMatches(matches){
