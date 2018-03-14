@@ -25,13 +25,13 @@ function addCategory(category){
 function getCategoryByName(name){
     return new Promise((resolve, reject) => {
         Category.findOne({
-            "name": { "$regex": name, "$options": "i" }
+            "name":  name
         })
         .then((category) => {
             if(category){
                 resolve(category);
             } else {
-                reject("Categoria não encontrada");
+                reject("Categoria não encontrada " + name);
             }
             
         })

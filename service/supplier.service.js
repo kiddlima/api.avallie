@@ -34,58 +34,60 @@ function addSupplier(supplier){
 }
 
 function addSuppliers(suppliers){
+    var formattedSuppliers = [];
+
+    var categories = [];
+
     return new Promise((resolve, reject) => {
-        for(let i = 0; i < suppliers.length; i++){
-            suppliers[i] = appHelper.getNewFormattedSupplier(suppliers[i]);
+        daoCategory.getAllCategories()
+        .then((result) => {
+            categories = result;
+            for(let i = 0; i < suppliers.length; i++){
+                suppliers[i] = appHelper.getNewFormattedSupplier(suppliers[i]);
     
-            //AUX ARRAY TO CATEGORIES
-            var categoriesIDs = [];
+                formattedSuppliers[i] = suppliers[i];
     
-            for(let j = 0; j < suppliers[i].categories.length; j++){
-                daoCategory.getCategoryByName(suppliers[i].categories[j])
-                .then((result) => {
-                    categoriesIDs.push(result._id);
-    
-                    //FINISHED TO FILL CATEGORIES
-                    if(j == suppliers[i].categories.length - 1){
-                        
-                        suppliers[i].categories = categoriesIDs;
-    
-                    }
-                    if(i == suppliers.length - 1){
-                        addFormatedSuppliers(suppliers)
-                        .then((result) => {
-                            resolve(result);
-                        })
-                        .catch((err) => {
-                            reject(err);
-                        });
-                    }                        
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+                //FIND THE CATEGORY INSIDE BASED ON ALL CATEGORIES ARRAY
+                formattedSuppliers[i].categories = findCategoriesInsideArray(formattedSuppliers[i].categories, categories);
             }
-            
-        }
+
+            addFormatedSuppliers(formattedSuppliers)
+            .then((result) => {
+                resolve(resolve);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     });
 }
 
+function findCategoriesInsideArray(supplierCategories, allCategories){
+    var categoriesIds = [];
+    for(let j = 0; j < allCategories.length; j++){
+        for(let i = 0; i < supplierCategories.length; i++){
+            if(allCategories[j].name == supplierCategories[i]){
+                categoriesIds.push(allCategories[j].id);
+            }
+        }
+    }
+
+    return categoriesIds;
+}
+
+
 function addFormatedSuppliers(suppliers){
     return new Promise((resolve, reject) => {
-        for(let i = 0; i < suppliers.length; i++){
-            dao.addSupplier(suppliers[i])
-            .then((result) => {
-                if(i == suppliers.length - 1){
-                    resolve(suppliers.length + " fornecedores cadastrados");
-                }
-            })
-            .catch((err) => {
-                if(i == suppliers.length - 1){
-                    reject(err);
-                }
-            });
-        }
+        dao.addSuppliers(suppliers)
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        });
     })
 }
 

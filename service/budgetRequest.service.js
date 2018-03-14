@@ -347,7 +347,7 @@ function getToSupplierEmailInfo(products, supplierEmail, budgetRequestId){
 function getToClientEmailInfo(budgetRequest, suppliersLenght){
 	var products = "\n";
 
-	for(let i = 0; i < budgetRequest.products; i++){
+	for(let i = 0; i < budgetRequest.products.length; i++){
 		products += budgetRequest.products[i].name + "\n";
 	}
 

@@ -5,6 +5,7 @@ let dao = {};
 
 dao.getSuppliersByCategories = getSuppliersByCategories;
 dao.addSupplier = addSupplier;
+dao.addSuppliers = addSuppliers;
 dao.addBudgetRequestToSupplier = addBudgetRequestToSupplier;
 
 module.exports = dao;
@@ -35,6 +36,18 @@ function getSuppliersByCategories(categories){
         })
         .catch((err) => {
             reject("Erro no banco")
+        })
+    })
+}
+
+function addSuppliers(suppliers){
+    return new Promise((resolve, reject) => {
+        Supplier.insertMany(suppliers)
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
         })
     })
 }
