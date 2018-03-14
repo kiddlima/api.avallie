@@ -53,13 +53,7 @@ function addSuppliers(suppliers){
 
             addFormatedSuppliers(formattedSuppliers)
             .then((result) => {
-<<<<<<< HEAD
                 resolve(resolve);
-=======
-                if(i == suppliers.length - 1){
-                    resolve(i + " fornecedores cadastrados \n Tamanho do array de suppliers: " + suppliers.length);
-                }
->>>>>>> 0f21037c9a1b29201f0223066b9118f96cbf4bd1
             })
             .catch((err) => {
                 reject(err);
