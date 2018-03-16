@@ -263,32 +263,37 @@ function findMatchingProductsByCategories(products){
     //LIST THAT WILL BE RETURNED WITH FULL MATCHES OBJECTS
     let matchesList = [];
 
-    for(let i = 0; i < products.length; i++){
-        
-        for(let j = 0; j < products.length; j++){
-            if(thisProductIsNotMatchedYet(products[i], matchesList)){
-            //IF IS NOT THE SAME PRODUT
-                if(products[i]._id != products[j]._id){
-										//TRY TO ADD TO EXISTING MATCH ARRAY
-										if(tryToAddToExistingMatchArray(products[i], matchesList)){
-												//WAS ADDED TO EXISTING MATCH ARRAY
-										} else if(products[i].category == products[j].category) {
-												//THIS MATCH DOES NOT EXIST YET
-												let newMatchArray = [
-														products[i],
-														products[j]
-												]
-
-												//ADD NEW MATCH TO THE LIST
-												matchesList.push(newMatchArray);                            
-										} else {
-											//NO MATCH FOR THIS GUY, ADD A SINGLE MATCH PRODUCT 		
-											matchesList.push([products[i]]);
-										}
-                }
-            }
-        }
+		if(products.length > 1){
+			for(let i = 0; i < products.length; i++){
+					
+					for(let j = 0; j < products.length; j++){
+							if(thisProductIsNotMatchedYet(products[i], matchesList)){
+							//IF IS NOT THE SAME PRODUT
+									if(products[i]._id != products[j]._id){
+											//TRY TO ADD TO EXISTING MATCH ARRAY
+											if(tryToAddToExistingMatchArray(products[i], matchesList)){
+													//WAS ADDED TO EXISTING MATCH ARRAY
+											} else if(products[i].category == products[j].category) {
+													//THIS MATCH DOES NOT EXIST YET
+													let newMatchArray = [
+															products[i],
+															products[j]
+													]
+	
+													//ADD NEW MATCH TO THE LIST
+													matchesList.push(newMatchArray);                            
+											} else {
+												//NO MATCH FOR THIS GUY, ADD A SINGLE MATCH PRODUCT 		
+												matchesList.push([products[i]]);
+											}
+									}
+							}
+					}
+			}
+		} else {
+			matchesList.push([products[0]]);
 		}
+
 		
     return matchesList;
 }
