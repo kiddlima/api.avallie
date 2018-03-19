@@ -117,7 +117,7 @@ function addBudgetRequest(budgetRequest){
 
 																		if(j == groupedMatches.length - 1){
 																			//SEND EMAIL TO USER
-																			emailHelper.sendEmail(getToClientEmailInfo(budgetRequest, groupedMatches.length))
+																			emailHelper.sendEmail(getToClientEmailInfo(budgetRequest, productObjects, groupedMatches.length))
 																			.then((response) => {
 																				resolve(response);
 
@@ -430,11 +430,11 @@ function getToSupplierEmailInfo(products, supplier, budgetRequestId){
     }
 }
 
-function getToClientEmailInfo(budgetRequest, suppliersLenght){
+function getToClientEmailInfo(budgetRequest, budgetRequestProducts, suppliersLenght){
 	var products = "\n";
 
-	for(let i = 0; i < budgetRequest.products.length; i++){
-		products += budgetRequest.products[i].name + "\n";
+	for(let i = 0; i < budgetRequestProducts.length; i++){
+		products += budgetRequestProducts[i].name + "\n";
 	}
 
     return {
