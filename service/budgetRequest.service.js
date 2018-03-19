@@ -125,19 +125,18 @@ function addBudgetRequest(budgetRequest){
 
 																			})
 																			.catch((err) => {
-																				reject(err);
+																				console.log(err);
 																			})
 																		}
 																	})
 																	.catch((err) => {
-																		reject(err);
+																		console.log(err);
 																	})	
 																}
 														})
 														.catch((err) => {
 															console.log(err)
 														})
-																
 														})
 														.catch((err) => {
 															//FAIL TO SAVE BUDGET REQUEST
