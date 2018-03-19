@@ -8,6 +8,7 @@ const Promise = require('promise');
 let service = {}
 
 service.addBudgetRequest = addBudgetRequest;
+service.getBudgetRequests = getBudgetRequests;
 
 module.exports = service;
 
@@ -37,6 +38,18 @@ module.exports = service;
     ]
 
 } */
+
+function getBudgetRequests(){
+	return new Promise((resolve, reject) => {
+		daoBudgetRequest.getBudgetRequests()
+		.then((result) => {
+			resolve(result);
+		})
+		.catch((err) => {
+			reject(err);
+		})
+	})
+}
 
 function addBudgetRequest(budgetRequest){
     let user = budgetRequest.user;
@@ -79,16 +92,7 @@ function addBudgetRequest(budgetRequest){
 														//SET FULL PRODUCT ITEM TO BUDGET REQUEST OBJECT
 														budgetRequest.products = productObjects;
 
-														//SAVE THIS BUDGET REQUEST ON DATABASE
-														daoBudgetRequest.addBudgetRequest(budgetRequest)
-														.then((response) => {	
-
-															//BUDGET REQUEST SAVED SUCCESFULLY
-															resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
-															
-															budgetRequest = response;
-
-															var matches = findMatchingProductsByCategories(fullProducts);
+														var matches = findMatchingProductsByCategories(fullProducts);
 
 														//ARRAY OF CATEGORIES
 														var categories = getCategoriesFromMatches(matches);
@@ -96,6 +100,15 @@ function addBudgetRequest(budgetRequest){
 															.then((suppliers) => {
 																//ARRAY OF MATCHES
 																var groupedMatches = groupMatchesBySupplier(matches, suppliers);
+
+																//SAVE THIS BUDGET REQUEST ON DATABASE
+																daoBudgetRequest.addBudgetRequest(getFormattedBudgetRequest(budgetRequest, groupedMatches))
+																.then((response) => {	
+
+																budgetRequest = response;
+
+																	//BUDGET REQUEST SAVED SUCCESFULLY
+																resolve(apiHelper.buildResponseMessage(200, "Orçamento registrado com succeso. Você receberá um email com todas as informações de sua solicitação."));
 
 																for(let j = 0; j < groupedMatches.length; j++){
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
@@ -131,9 +144,7 @@ function addBudgetRequest(budgetRequest){
 															let error = err.errors;
             									reject(apiHelper.buildResponseMessage(400, error[Object.keys(error)[0]].properties.message));
 														});		
-														
-                    });    
-                    
+												});
                 } else {
                     reject(apiHelper.buildResponseMessage(400, "Nenhum produto solicitado"))        
                 }
@@ -147,6 +158,46 @@ function addBudgetRequest(budgetRequest){
         reject(apiHelper.buildResponseMessage(400, "Usuário inválido ou não informado"))
     }
 });
+}
+
+function getFormattedBudgetRequest(budgetRequest, groupedMatches){
+	var formattedBudgetRequest = {};
+
+	formattedBudgetRequest.user = budgetRequest.user;
+	formattedBudgetRequest.address = budgetRequest.address;
+	formattedBudgetRequest.deadLine = budgetRequest.deadLine;
+	formattedBudgetRequest.suppliers = [];
+
+	for(let i = 0; i < groupedMatches.length; i++){
+		var formattedMatch = {};
+
+		var supplierInfos = groupedMatches[i][0];
+
+		formattedMatch.id = supplierInfos.id;
+		formattedMatch.fantasyName = supplierInfos.fantasyName;
+		formattedMatch.phones = supplierInfos.phones;
+		formattedMatch.emails = supplierInfos.emails;
+		formattedMatch.resposable = supplierInfos.responsable;
+		formattedMatch.city = supplierInfos.city;
+		formattedMatch.state = supplierInfos.state;
+		formattedMatch.address = supplierInfos.address;
+		formattedMatch.cnpj = supplierInfos.cnpj;
+		formattedMatch.categories = supplierInfos.categories;
+
+		formattedMatch.products = [];
+
+		for(let j = 1; j < groupedMatches[i].length; j++){
+			var product = {};
+
+			product = groupedMatches[i][j];
+
+			formattedMatch.products.push(product);
+		}
+
+		formattedBudgetRequest.suppliers.push(formattedMatch);
+	}
+
+	return formattedBudgetRequest;
 }
 
 function addThisBudgetRequestToTheSuppliers(matches, budgetRequest){

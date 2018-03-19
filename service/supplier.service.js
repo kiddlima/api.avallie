@@ -36,36 +36,24 @@ function addSupplier(supplier){
 function addSuppliers(suppliers){
     var formattedSuppliers = [];
 
-    var categories = [];
-
     return new Promise((resolve, reject) => {
-        daoCategory.getAllCategories()
-        .then((result) => {
-            categories = result;
-            for(let i = 0; i < suppliers.length; i++){
-                suppliers[i] = appHelper.getNewFormattedSupplier(suppliers[i]);
-    
-                formattedSuppliers[i] = suppliers[i];
-    
-                //FIND THE CATEGORY INSIDE BASED ON ALL CATEGORIES ARRAY
-                formattedSuppliers[i].categories = findCategoriesInsideArray(formattedSuppliers[i].categories, categories);
-            }
+        for(let i = 0; i < suppliers.length; i++){
+            suppliers[i] = appHelper.getNewFormattedSupplier(suppliers[i]);
 
-            addFormatedSuppliers(formattedSuppliers)
-            .then((result) => {
-                resolve(resolve);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+            formattedSuppliers[i] = suppliers[i];
+        }
+
+        addFormatedSuppliers(formattedSuppliers)
+        .then((result) => {
+            resolve(resolve);
         })
         .catch((err) => {
-            console.log(err);
-        })
+            reject(err);
+        });
     });
 }
 
-function findCategoriesInsideArray(supplierCategories, allCategories){
+/* function findCategoriesInsideArray(supplierCategories, allCategories){
     var categoriesIds = [];
     for(let j = 0; j < allCategories.length; j++){
         for(let i = 0; i < supplierCategories.length; i++){
@@ -76,7 +64,7 @@ function findCategoriesInsideArray(supplierCategories, allCategories){
     }
 
     return categoriesIds;
-}
+} */
 
 
 function addFormatedSuppliers(suppliers){

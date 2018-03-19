@@ -19,23 +19,13 @@ function addProduct(product, callback){
 }
 
 function addProducts(req, res, next){
-    for(let i = 0; i < req.body.length; i++){
-        daoCategory.getCategoryByName(req.body[i].category)
-        .then((category) => {
-            if(category){
-                req.body[i].category = category._id;
-            }
-            
-            addProduct(req.body[i], (result) => {
-                if(i = req.body.length){
-                    res.json(result)
-                }
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    }
+    productService.addProducts(req.body)
+    .then((result) => {
+        res.json(req.body.length + " produtos inseridos")
+    })
+    .catch((err) => {
+        res.json(err)
+    });
 }
 
 function getProducts(req, res, next){

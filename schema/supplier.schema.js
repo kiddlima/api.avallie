@@ -41,6 +41,9 @@ let supplier = new mongoose.Schema({
             }
         ],
     }]
-}, {versionKey: false});
+}, {
+    versionKey: false,
+    toObject: {virtuals: true}
+});
 
 module.exports = mongoose.model('Supplier', supplier);

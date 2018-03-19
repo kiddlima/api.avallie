@@ -6,6 +6,7 @@ let dao = {};
 dao.addProduct = addProduct;
 dao.getProductById = getProductById;
 dao.getProducts = getProducts;
+dao.addProducts = addProducts;
 
 module.exports = dao;
 
@@ -50,6 +51,18 @@ function getProductById(id){
         .catch((err) => {
             console.log("erro mongo")
             reject("Erro no mongo");
+        })
+    })
+}
+
+function addProducts(products){
+    return new Promise((resolve, reject) => {
+        Product.insertMany(products)
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
         })
     })
 }

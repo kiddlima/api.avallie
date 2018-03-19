@@ -24,5 +24,6 @@ router.get('/getAllCategories', categoryController.getAllCategories);
 
 //BUDGET REQUEST
 router.post('/addBudgetRequest', budgetRequestController.addBudgetRequest);
+router.get('/getBudgetRequests', budgetRequestController.getBudgetRequests);
 
 module.exports = router;

@@ -7,6 +7,7 @@ const appHelper = require('../helper/api.helper')
 let service = {};
 
 service.addProduct = addProduct;
+service.addProducts = addProducts;
 service.getProducts = getProducts;
 
 module.exports = service;
@@ -24,29 +25,24 @@ function addProduct(product){
     });
 }
 
+function addProducts(products){
+    return new Promise((resolve, reject) => {
+        dao.addProducts(products)
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
+}
+
 function getProducts(filter){
     return new Promise((resolve, reject) => {
         dao.getProducts(filter)
         .then((products) => {
             if(products && products.length > 0){
-
-                let allCategories = [];
-
-                daoCategory.getAllCategories()
-                .then((categories) => {
-                    allCategories = categories;
-                    for(let i = 0; i < products.length; i++){
-                        products[i].category = appHelper.getCategoryFromId(products[i].category, allCategories).name;
-                        
-                        if(i == products.length - 1){
-                            resolve(products);
-                        }
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-                
+                resolve(products);
             } else {
                 reject(appHelper.buildResponseMessage(400, "Não foi encontrado nenhum produto"))
             }
