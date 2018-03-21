@@ -31,7 +31,7 @@ categories - Array de String(id da categoria)
 
 
 #### RESPOSTA
-
+```
 {
 
   status - Number (200 ou 400),
@@ -39,7 +39,7 @@ categories - Array de String(id da categoria)
   messages - Array de Strings
   
 }
-
+```
 
 ## POST - /getProducts
 
