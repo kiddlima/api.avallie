@@ -20,17 +20,13 @@ fantasyName - String
 socialReason - String
 
 address - Array do tipo 
-
-        { 
-        
-          street - String,
-          
-          number - Number (long, int),
-          
-          city - String
-          
-        }
-        
+```
+{
+        street - String,
+        number - Number (long, int),
+        city - String
+}
+```     
 categories - Array de String(id da categoria) 
 
 
@@ -56,7 +52,7 @@ categories - Array de String(id da categoria)
 }
 
 ### RESPOSTA
-
+```
 [
     {
         "_id": "5a8d6db438c41724bce86606",
@@ -71,26 +67,29 @@ categories - Array de String(id da categoria)
         "unity": "un"
     },
 ]
-
+```
 
 OU 
 
+```
 {
     "status": 400,
     "messages": "Não foi encontrado nenhum produto"
 }
-
+```
 
 
 ## POST - /addBudgetRequest
 
+```
 {
         clientEmail - String
         product - String id do produto
 }
-
+```
 
 #### RESPOSTA
+```
 {
     "status": 200,
     "messages": [
@@ -99,5 +98,6 @@ OU
         "Enviamos um email para kiddlima@gmail.com com as informações de sua solicitação"
     ]
 }
+```
 
 ## GET - /getBudgetRequests
