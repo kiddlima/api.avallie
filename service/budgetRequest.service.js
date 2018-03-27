@@ -89,10 +89,7 @@ function addBudgetRequest(budgetRequest){
 															productObjects[i].observation = products[i].observation;
 														}
 
-														//SET FULL PRODUCT ITEM TO BUDGET REQUEST OBJECT
-														budgetRequest.products = productObjects;
-
-														var matches = findMatchingProductsByCategories(fullProducts);
+														var matches = findMatchingProductsByCategories(productObjects);
 
 														//ARRAY OF CATEGORIES
 														var categories = getCategoriesFromMatches(matches);
