@@ -109,6 +109,7 @@ function addBudgetRequest(budgetRequest){
 
 																for(let j = 0; j < groupedMatches.length; j++){
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
+																	console.log("budget request" + budgetRequest)
 																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id, budgetRequest.deadline, budgetRequest.addresss))
 																	.then((response) => {
 
@@ -407,7 +408,9 @@ function hasValidField(field){
     return field && field.length > 0;
 }
 
-function getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
+function 
+
+getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
 	var body = emailHelper.createToSupplierEmail(supplier, products, deadline, address);
 
     return {

@@ -112,14 +112,14 @@ function createToSupplierEmail(supplier, products, deadLine, address){
 		</tr>\
 		<tr>\
 			<td align=\"center\" colspan=\"3\" style=\"font-weight: bold\">\
-				<h1 style=\"font-size: 32pt;\">" + supplier.name + ",</h1>\
+				<h1 style=\"font-size: 32pt;\">" + supplier.socialReason + ",</h1>\
 				<p>você acaba de receber uma nova<br/>solicitação de Orçamento:</p>\
 			</td>\
 		</tr>\
 	</thead>\
 	<tbody>\
 		<tr>\
-            " + getProductsHtml();
+            " + getProductsHtml(products);
 			+	"\
 		</tr>\
 		<tr>\
