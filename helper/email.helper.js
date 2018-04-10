@@ -33,10 +33,6 @@ function sendEmail(mailOptions){
 }
 
 function createToSupplierEmail(supplier, products, deadLine, address){
-	console.log("Supplier " + supplier)
-	console.log("Products " + products.length);
-	console.log("Prazo" + deadLine);
-	console.log("Address" + address);
     var emailHtml = 
     "<!DOCTYPE html> \
 <html> \
