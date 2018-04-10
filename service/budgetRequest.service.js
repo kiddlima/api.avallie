@@ -417,7 +417,7 @@ getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
         from: "comercial@avallie.com",
         to: supplier.emails[0],
         subject: "Solicitação de orçamento Avallie: " + budgetRequestId,
-        text: body 
+        html: body 
     
     }
 }
