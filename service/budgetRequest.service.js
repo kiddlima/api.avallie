@@ -109,7 +109,8 @@ function addBudgetRequest(budgetRequest){
 
 																for(let j = 0; j < groupedMatches.length; j++){
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
-																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id, budgetRequest.deadline, budgetRequest.user.address))
+																	console.log("aaaaa" + budgetRequest.address);
+																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id, budgetRequest.deadline, budgetRequest.address))
 																	.then((response) => {
 
 																		if(j == groupedMatches.length - 1){
