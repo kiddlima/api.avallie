@@ -33,13 +33,8 @@ function sendEmail(mailOptions){
 }
 
 function createToSupplierEmail(supplier, products, deadLine, address){
-    var emailHtml = 
-    "<!DOCTYPE html> \
-<html> \
-<head> \
-	<title>Avallie</title> \
-	<meta charset=\"utf-8\"> \
-	<link href=\"https://fonts.googleapis.com/css?family=Roboto\" rel=\"stylesheet\"> \
+	var emailHtml = 
+	"<body>\
 	<style type=\"text/css\">\
 	*{box-sizing:border-box;font-family:'Roboto', sans-serif;margin:0;padding:0;left:0;top:0;}\
 		html,body{height:100%;width:100%;}\
@@ -93,8 +88,6 @@ function createToSupplierEmail(supplier, products, deadLine, address){
 			white-space: nowrap;\
 		}\
 	</style>\
-</head>\
-<body>\
 <table class=\"content\">\
 	<thead>\
 		<tr>\
@@ -146,8 +139,7 @@ function createToSupplierEmail(supplier, products, deadLine, address){
 	<li><a href=\"http://facebook.com/avallie\">compartilhe <img src=\"/media/facebook-icon.png\" height=\"27pt\" style=\"vertical-align: middle;\" /></a></li>\
 </ul>\
 <div style=\"height: 16pt;clear:both;\">&nbsp;</div>\
-</body>\
-</html>";
+</body>";
 }
 
 function getProductsHtml(products){
