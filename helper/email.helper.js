@@ -35,59 +35,6 @@ function sendEmail(mailOptions){
 function createToSupplierEmail(supplier, products, deadLine, address){
 	var emailHtml = 
 	"<body>\
-	<style type=\"text/css\">\
-	*{box-sizing:border-box;font-family:'Roboto', sans-serif;margin:0;padding:0;left:0;top:0;}\
-		html,body{height:100%;width:100%;}\
-		body{\
-			background: linear-gradient(135deg,#50b7a6,#155AAF);\
-			background-color: #51c889;\
-			background-attachment: fixed;\
-			background-repeat: no-repeat;\
-			padding: 40pt 40pt 0 40pt;\
-		}\
-		.content{\
-			background: white;\
-			width: 100%;\
-			min-height: 100%;\
-			padding: 56pt;\
-			color: #333;\
-			clear: both;\
-		}\
-		h1, h2{margin-top: 16pt;}\
-		p{margin-top: 8pt;font-size:17pt;}\
-		.info{\
-			font-size: 17pt;\
-		}\
-		.info label{\
-			color: #4782ae;\
-			font-weight: bold;\
-			display: inline-block;\
-			margin-top: 16pt;\
-		}\
-		.info p{\
-			color: #666;\
-		}\
-		a{color:#50b7a6;}\
-		.contact{\
-			display: inline-block;\
-			list-style: none;\
-			text-align: right;\
-			color: #fff;\
-			float: right;\
-			font-weight: bold;\
-			margin: 16pt 0;\
-			padding-right: 16pt;\
-			border-right: 3pt solid #fff;\
-		}\
-		.contact li{\
-			margin: 8pt 0;\
-		}\
-		.contact a{\
-			color: #fff;\
-			text-decoration: none;\
-			white-space: nowrap;\
-		}\
-	</style>\
 <table class=\"content\">\
 	<thead>\
 		<tr>\
