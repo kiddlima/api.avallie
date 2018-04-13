@@ -25,7 +25,7 @@ function addProduct(product){
 function getProducts(filter){
     return new Promise((resolve, reject) => {
         Product.find(
-            getProductQuery(filter), null,
+            filter ? getProductQuery(filter): {}, null,
             {
                 sort: {name: 1}
             }

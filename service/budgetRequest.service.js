@@ -408,9 +408,7 @@ function hasValidField(field){
     return field && field.length > 0;
 }
 
-function 
-
-getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
+function getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
 	var body = emailHelper.createToSupplierEmail(supplier, products, deadline, address);
 
     return {

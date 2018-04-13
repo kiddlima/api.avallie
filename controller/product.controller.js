@@ -29,7 +29,7 @@ function addProducts(req, res, next){
 }
 
 function getProducts(req, res, next){
-    productService.getProducts(req.body)
+    productService.getProducts()
     .then((products) => {
         res.json(products);
     })
