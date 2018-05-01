@@ -27,7 +27,7 @@ if (config.environment === 'development') {
   };
   config.mongodb = {
     //informar a dbURI da umbler aqui
-    dbURI: 'mongodb://avalliedb:4v4lli3db@mongo_avallie:27017/avallie'
+    dbURI: 'mongodb://avalliedb:4v4lli3db@naboo.mongodb.umbler.com:45197/avallie'
   };
 }
 
