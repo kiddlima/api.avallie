@@ -17,11 +17,11 @@ let transporter = nodemailer.createTransport({
 		pass: "4v4lli3comercial"  // generated ethereal password
 	}
 });
-
+	
 // send mail with defined transport object
 function sendEmail(mailOptions) {
 	return new Promise((resolve, reject) => {
-		transporter.sendMail(source, (error, info) => {
+		transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
 				reject(error);
 			} else {
@@ -33,7 +33,7 @@ function sendEmail(mailOptions) {
 }
 
 function createToSupplierEmail(supplier, products, deadLine, address) {
-	var htmlProducts = getProductsHtml(products);s
+	var htmlProducts = getProductsHtml(products);
 
 	var emailHtml = "<!DOCTYPE html> \
 <html style=\"height:100%;width:100%;\"> \
@@ -42,12 +42,13 @@ function createToSupplierEmail(supplier, products, deadLine, address) {
     <meta charset=\"utf-8\"> \
     <link href=\"https://fonts.googleapis.com/css?family=Roboto\" rel=\"stylesheet\"> \
 </head>\
-<body style=\"background: linear-gradient(135deg,#50b7a6,#155AAF); background-color: #51c889; background-attachment: fixed; background-repeat: no-repeat; padding: 40pt 40pt 0 40pt; height:100%;width:100%; box-sizing:border-box;font-family:'Roboto', sans-serif;margin:0;padding:0;left:0;top:0;\">\
+<body>\
+<div style=\"background: linear-gradient(135deg,#50b7a6,#155AAF); background-color: #51c889; background-attachment: fixed; background-repeat: no-repeat; padding: 40pt 40pt 0 40pt; height:100%;width:100%; box-sizing:border-box;font-family:'Roboto', sans-serif;margin:0;padding:0;left:0;top:0;\">\
 <table style=\"background: white; width: 100%; min-height: 100%; padding: 56pt; color: #333; clear: both;\" >\
     <thead>\
         <tr>\
             <td style=\"padding: 0 40pt\" align=\"right\">\
-                <img src=\"/media/avallie-logo.png\" height=\"150pt\"/>\
+                <img src=\"cid:unique@kreata.ee\" height=\"150pt\"/>\
             </td>\
             <td bgcolor=\"#2a6796\" width=\"4\"></td>\
             <td style=\"padding: 0 40pt\">\
@@ -62,9 +63,7 @@ function createToSupplierEmail(supplier, products, deadLine, address) {
         </tr>\
     </thead>\
     <tbody>\
-        <tr>\
             " + htmlProducts +  "\
-			        </tr>\
 			        <tr>\
 			            <td>\
 			                <table style=\"font-size: 17pt;\" class=\"info\">\
@@ -79,9 +78,9 @@ function createToSupplierEmail(supplier, products, deadLine, address) {
 			            <td colspan=\"3\">\
 			                <table style=\"left:0;right:0;margin:auto;\">\
 			                    <tr><td>&nbsp;</td></tr>\
-			                    <tr><td align=\"center\"><p> style=\"margin-top: 8pt;font-size:17pt;\"Para responder essa soliticação, responda para o e-mail comercial@avallie.com ou entre em contato pelo telefone <a style=\"color:#50b7a6;\" href=\"tel:+5541991574276\">(41) 99157 4276</a></p></td></tr>\
+			                    <tr><td align=\"center\"><p style=\"margin-top: 8pt;font-size:17pt;\">Para responder essa soliticação, responda para o e-mail comercial@avallie.com ou entre em contato pelo telefone <a style=\"color:#50b7a6;\" href=\"tel:+5541991574276\">(41) 99157 4276</a></p></td></tr>\
 			                    <tr><td align=\"center\"><div style=\"background-color: #3b86e2; height: 3pt;width: 100pt; display: inline-block; margin: 20pt 0;\">&nbsp;</div></td></tr>\
-			                    <tr><td align=\"center\"><p>style=\"margin-top: 8pt;font-size:17pt;>\"Caso tenha qualquer dúvida ou sugestão, entre em contato!</p></td></tr>\
+			                    <tr><td align=\"center\"><p style=\"margin-top: 8pt;font-size:17pt;\">Caso tenha qualquer dúvida ou sugestão, entre em contato!</p></td></tr>\
 			                </table>\
 			            </td>\
 			        </tr>\
@@ -93,6 +92,7 @@ function createToSupplierEmail(supplier, products, deadLine, address) {
 			    <li style=\"margin: 8pt 0;\"><a style=\"color:#50b7a6;color: #fff; text-decoration: none; white-space: nowrap;\"  href=\"http://facebook.com/avallie\">compartilhe <img src=\"/media/facebook-icon.png\" height=\"27pt\" style=\"vertical-align: middle;\" /></a></li>\
 			</ul>\
 			<div style=\"height: 16pt;clear:both;\">&nbsp;</div>\
+			</div>\
 			</body>\
 			</html>";
 
@@ -100,16 +100,17 @@ function createToSupplierEmail(supplier, products, deadLine, address) {
 }
 
 function getProductsHtml(products) {
-	var productsHtml;
-	for (let i = 0; i < products.length; i++) {
-		var productHtml = "<td colspan=\"3\">\
+	var productsHtml = "";
+	for (let i = 1; i < products.length; i++) {
+		var productHtml = "<tr>\
+		\<td colspan=\"3\">\
 				<table style=\"font-size: 17pt;\" class=\"info\">\
 					<tr><td><label style=\"color: #4782ae; font-weight: bold; display: inline-block; margin-top: 16pt;\">Material</label><p style=\"margin-top: 8pt;font-size:17pt;color: #666;\">"+ products[i].name + "</p></td></tr>\
 					<tr><td><label style=\"color: #4782ae; font-weight: bold; display: inline-block; margin-top: 16pt;\">Quantidade</label><p style=\"margin-top: 8pt;font-size:17pt;color: #666;\">" + products[i].amount + " " + products[i].unity + "</p></td></tr>\
                     <tr><td><label style=\"color: #4782ae; font-weight: bold; display: inline-block; margin-top: 16pt;\">Marca</label><p style=\"margin-top: 8pt;font-size:17pt;color: #666;\">  " + products[i].manufacturer + "</p></td></tr>\
 					<tr><td><label style=\"color: #4782ae; font-weight: bold; display: inline-block; margin-top: 16pt;\">Observações</label><p style=\"margin-top: 8pt;font-size:17pt;color: #666;\">" + products[i].observation + "</p></td></tr>\
 				</table>\
-			</td>";
+			</td></tr>";
 
 		productsHtml += productHtml;
 	}

@@ -415,7 +415,12 @@ function getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, a
         from: "comercial@avallie.com",
         to: supplier.emails[0],
         subject: "Solicitação de orçamento Avallie: " + budgetRequestId,
-        html: body 
+		html: body,
+		attachments: [{
+			filename: 'avallie-logo.png',
+			path: './helper/media/avallie-logo.png',
+			cid: 'unique@kreata.ee' //same cid value as in the html img src
+		}]
     
     }
 }
