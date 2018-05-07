@@ -4,11 +4,13 @@ const daoProduct = require('.././dao/product.dao');
 const apiHelper = require('.././helper/api.helper');
 const emailHelper = require('.././helper/email.helper');
 const Promise = require('promise');
+const dateFormat = require('dateformat');
 
 let service = {}
 
 service.addBudgetRequest = addBudgetRequest;
 service.getBudgetRequests = getBudgetRequests;
+service.updateBudgetRequest = updateBudgetRequest;
 
 module.exports = service;
 
@@ -38,6 +40,18 @@ module.exports = service;
     ]
 
 } */
+
+function updateBudgetRequest(id, status){
+	return new Promise((resolve, reject) => {
+		daoBudgetRequest.updateBudgetRequestStatus(id, status)
+		.then((response) => {
+			resolve(apiHelper.buildResponseMessage(200, "Status alterado com sucesso"))
+		})
+		.catch((err) => {
+			reject(apiHelper.buildResponseMessage(400, "Falha ao alterar o status"));
+		})
+	})
+}
 
 function getBudgetRequests(){
 	return new Promise((resolve, reject) => {
@@ -109,8 +123,8 @@ function addBudgetRequest(budgetRequest){
 
 																for(let j = 0; j < groupedMatches.length; j++){
 																	//SEND EMAIL FOR SUPPLIERS WITH THESE ARRAY OF PRODUCTS
-																	console.log("aaaaa" + budgetRequest.address);
-																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id, budgetRequest.deadline, budgetRequest.address))
+																	
+																	emailHelper.sendEmail(getToSupplierEmailInfo(groupedMatches[j], groupedMatches[j][0], budgetRequest._id, budgetRequest.deadLine, budgetRequest.address))
 																	.then((response) => {
 
 																		if(j == groupedMatches.length - 1){
@@ -409,7 +423,7 @@ function hasValidField(field){
 }
 
 function getToSupplierEmailInfo(products, supplier, budgetRequestId, deadline, address){
-	var body = emailHelper.createToSupplierEmail(supplier, products, deadline, address);
+	var body = emailHelper.createToSupplierEmail(supplier, products, dateFormat(deadline, "dd/mm/yyyy"), address);
 
     return {
         from: "comercial@avallie.com",

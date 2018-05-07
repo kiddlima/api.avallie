@@ -4,6 +4,7 @@ let controller = {};
 
 controller.addBudgetRequest = addBudgetRequest;
 controller.getBudgetRequests = getBudgetRequests;
+controller.updateBudgetRequest =updateBudgetRequest;
 
 module.exports = controller;
 
@@ -21,6 +22,18 @@ function addBudgetRequest(req, res, next){
 
 function getBudgetRequests(req, res, next){
     budgetRequestService.getBudgetRequests(req.body)
+    .then((result) => {
+        res.status(200);
+        res.json(result);
+    })
+    .catch((err) => {
+        res.status(400);
+        res.json(err);
+    })
+}
+
+function updateBudgetRequest(req, res, next){
+    budgetRequestService.updateBudgetRequest(req.params.id, req.body.status)
     .then((result) => {
         res.status(200);
         res.json(result);
