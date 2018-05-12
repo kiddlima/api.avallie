@@ -100,4 +100,22 @@ OU
 }
 ```
 
+## PATCH - /updateBudgetRequest/ID
+
+```
+BODY
+{
+        status: String
+}
+```
+
+#### RESPOSTA
+```
+{
+    "status": 200,
+    "messages": [
+        "Status alterado com sucesso"       
+    ]
+}
+
 ## GET - /getBudgetRequests
