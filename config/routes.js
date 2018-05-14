@@ -27,4 +27,33 @@ router.post('/addBudgetRequest', budgetRequestController.addBudgetRequest);
 router.get('/getBudgetRequests', budgetRequestController.getBudgetRequests);
 router.patch("/updateBudgetRequest/:id", budgetRequestController.updateBudgetRequest);
 
+//AUTH
+router.post("/admin/login", (req, res, next) => {
+  switch(req.body.password){
+    case("allanAvallieAdmin"):
+      res.status(200);
+      res.json({name: "Allan"})
+      break;
+    case("caueAvallieAdmin"):
+      res.status(200);
+      res.json({name: "Caue"})
+      break;
+    case("joaoAvallieAdmin"):
+      res.status(200);
+      res.json({name: "Joao"})
+      break;
+    case("viniAvallieAdmin"):
+      res.status(200);
+      res.json({name: "Vinicius"})
+      break;
+    case("cassiAvallieAdmin"):
+      res.status(200);
+      res.json({name: "Cassiano"})
+      break;
+    default:
+      res.status(400);
+      res.json(false);
+  }
+})
+
 module.exports = router;

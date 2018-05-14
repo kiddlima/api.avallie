@@ -443,16 +443,20 @@ function getToClientEmailInfo(budgetRequest, budgetRequestProducts, suppliersLen
 	var products = "\n";
 
 	for(let i = 0; i < budgetRequestProducts.length; i++){
-		products += budgetRequestProducts[i].name + "\n";
+		products += budgetRequestProducts[i].name + ", ";
 	}
+
+	var body = emailHelper.createToUserEmail(budgetRequest.user.name, suppliersLenght, products);
 
     return {
         from: "comercial@avallie.com",
         to: budgetRequest.user.email,
         subject: "Solicitação de orçamento Avallie " + budgetRequest._id,
-        text: "Sua solicitação de orçamento para os produtos: " +
-				products
-				+ "Foi enviado para " +
-        suppliersLenght + " fornecedores"
+        html: body,
+		attachments: [{
+			filename: 'avallie-logo.png',
+			path: './helper/media/avallie-logo.png',
+			cid: 'unique@kreata.ee' //same cid value as in the html img src
+		}]
     }
 }
