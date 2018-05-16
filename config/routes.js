@@ -10,15 +10,18 @@ router.get('/',function(req, res){
 });
 
 //SUPPLIER 
-router.post('/addSupplier', supplierController.addSupplier);
-router.post('/addSuppliers', supplierController.addSuppliers);
+// ROTAS COMENTADAS POR SEGURANCA
+//router.post('/addSupplier', supplierController.addSupplier);
+//router.post('/addSuppliers', supplierController.addSuppliers);
 
 //PRODUTCS
-router.post('/addProducts', productController.addProducts);
+// ROTAS COMENTADAS POR SEGURANCA
+//router.post('/addProducts', productController.addProducts);
 router.post('/getProducts', productController.getProducts);
 
 //CATEGORIES
-router.post('/addcategories', categoryController.addCategories);
+// ROTAS COMENTADAS POR SEGURANCA
+//router.post('/addcategories', categoryController.addCategories);
 router.get('/getCategory/:category', categoryController.getCategoryByName);
 router.get('/getAllCategories', categoryController.getAllCategories);
 
