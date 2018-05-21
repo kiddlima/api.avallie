@@ -118,4 +118,23 @@ BODY
     ]
 }
 ```
-## GET - /getBudgetRequests
+## POST - /admin/login
+
+#### BODY
+```
+{
+    "password": String
+}
+```
+#### RESPOSTA
+```
+{
+        "name": "Vinicius"
+}
+```
+
+OU
+
+```
+false
+```
