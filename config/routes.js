@@ -11,7 +11,7 @@ router.get('/',function(req, res){
 
 //SUPPLIER 
 // ROTAS COMENTADAS POR SEGURANCA
-//router.post('/addSupplier', supplierController.addSupplier);
+router.post('/addSupplier', supplierController.addSupplier);
 //router.post('/addSuppliers', supplierController.addSuppliers);
 
 //PRODUTCS
