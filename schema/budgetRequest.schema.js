@@ -7,8 +7,8 @@ let budgetRequest = new mongoose.Schema({
     assinged_to: String,
     suppliers:[
         {
-            id: String,
-            status: {type: String, default: "Aguardando orçamento"},
+            supplierId: String,
+            status: {type: String, default: "Email não enviado"},
             phones: [String],
             cnpj: String,
             fantasyName: String,
@@ -33,7 +33,8 @@ let budgetRequest = new mongoose.Schema({
                         {
                             brand: String,
                             price: Number,
-                            observation: String
+                            observation: String,
+                            date: {type: Date, default: new Date()}
                         },
                     ]
                 }
