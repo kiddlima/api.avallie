@@ -57,10 +57,14 @@ function updateBudgetSupplierStatus(budgetRequestId, supplierId ,status){
             $set : { "suppliers.$.status" : status } 
             })
             .then((response) => {
-                resolve(response);
+                if(response.nModified == 0){
+                    reject("Nenhum registro foi modificado")
+                } else {
+                    resolve("Sucesso ao alterar status");
+                }
             })
             .catch((err) => {
-                reject(err);
+                reject("Erro no banco de dados");
             })
     });
 }

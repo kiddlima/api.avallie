@@ -11,6 +11,7 @@ let service = {}
 service.addBudgetRequest = addBudgetRequest;
 service.getBudgetRequests = getBudgetRequests;
 service.updateBudgetRequest = updateBudgetRequest;
+service.updateSupplierStatus = updateSupplierStatus;
 
 module.exports = service;
 
@@ -51,6 +52,18 @@ function updateBudgetRequest(id, status) {
 				reject(apiHelper.buildResponseMessage(400, "Falha ao alterar o status"));
 			})
 	})
+}
+
+function updateSupplierStatus(budgetRequestId, supplierId, status){
+	return new Promise((resolve, reject) => {
+		daoBudgetRequest.updateBudgetSupplierStatus(budgetRequestId, supplierId, status)
+		.then((response) => {
+			resolve(apiHelper.buildResponseMessage(200, response));
+		})
+		.catch((err) => {
+			reject(apiHelper.buildResponseMessage(400, err));
+		})
+	});
 }
 
 function getBudgetRequests() {
