@@ -138,3 +138,24 @@ OU
 ```
 false
 ```
+
+## PATCH /updateSupplierStatus
+
+#### BODY
+
+```
+{
+        budgetRequestId: String
+        supplierId: String
+        status: String
+}
+```
+#### RESPOSTA
+
+```
+{
+        status: 200 ou 400
+        messages: String
+}
+
+
