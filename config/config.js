@@ -4,7 +4,7 @@ let config = {};
 
 //quando servidor for pra producao ou hml trocar variavel abaixo para production
 //quando servidor for local, usar development
-config.environment = process.env.NODE_ENV || 'homolog';
+config.environment = process.env.NODE_ENV || 'development';
 
 // Preencher o BD com amostras, se for necessário
 config.seedDB = false;
@@ -35,7 +35,7 @@ if (config.environment === 'development') {
   };
   config.mongodb = {
     //informar a dbURI da umbler aqui 
-    dbURI: 'mongodb://avalliedbhomolog:4v4lli3db@mustafar.mongodb.umbler.com:45820/avallie'
+    dbURI: 'mongodb://avalliedbhomolog:4v4lli3db@mustafar.mongodb.umbler.com:45820/avalliehomolog'
   };
 }
 

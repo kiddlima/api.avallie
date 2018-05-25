@@ -6,6 +6,7 @@ let dao = {};
 dao.addBudgetRequest = addBudgetRequest;
 dao.getBudgetRequests = getBudgetRequests;
 dao.updateBudgetRequestStatus = updateBudgetRequestStatus;
+dao.updateBudgetSupplierStatus = updateBudgetSupplierStatus;
 
 module.exports = dao;
 
@@ -43,4 +44,23 @@ function getBudgetRequests(){
             reject(err);
         })
     })
+}
+
+function updateBudgetSupplierStatus(budgetRequestId, supplierId ,status){
+    return new Promise((resolve, reject) => {
+        BudgetRequest.update(
+            { 
+            "_id" : budgetRequestId, 
+            "suppliers.supplierId" : supplierId
+            },
+            { 
+            $set : { "suppliers.$.status" : status } 
+            })
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((err) => {
+                reject(err);
+            })
+    });
 }

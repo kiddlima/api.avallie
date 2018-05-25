@@ -12,16 +12,16 @@ router.get('/',function(req, res){
 //SUPPLIER 
 // ROTAS COMENTADAS POR SEGURANCA
 router.post('/addSupplier', supplierController.addSupplier);
-//router.post('/addSuppliers', supplierController.addSuppliers);
+router.post('/addSuppliers', supplierController.addSuppliers);
 
 //PRODUTCS
 // ROTAS COMENTADAS POR SEGURANCA
-//router.post('/addProducts', productController.addProducts);
+router.post('/addProducts', productController.addProducts);
 router.post('/getProducts', productController.getProducts);
 
 //CATEGORIES
 // ROTAS COMENTADAS POR SEGURANCA
-//router.post('/addcategories', categoryController.addCategories);
+router.post('/addcategories', categoryController.addCategories);
 router.get('/getCategory/:category', categoryController.getCategoryByName);
 router.get('/getAllCategories', categoryController.getAllCategories);
 
