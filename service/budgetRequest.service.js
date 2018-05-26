@@ -12,6 +12,7 @@ service.addBudgetRequest = addBudgetRequest;
 service.getBudgetRequests = getBudgetRequests;
 service.updateBudgetRequest = updateBudgetRequest;
 service.updateSupplierStatus = updateSupplierStatus;
+service.updateProductBudget = updateProductBudget;
 
 module.exports = service;
 
@@ -41,6 +42,24 @@ module.exports = service;
     ]
 
 } */
+
+function updateProductBudget(budgetRequestId, supplierId, productId, brand, price, observation){
+	var budget = {
+		"brand": brand,
+		"price": price,
+		"observation": observation
+	}
+	
+	return new Promise((resolve, reject) => {
+		daoBudgetRequest.updateProductBudget(budgetRequestId, supplierId, productId, budget)
+		.then((response) => {
+			resolve(apiHelper.buildResponseMessage(200, "Orçamento adicionado com sucesso"));
+		})
+		.catch((err) => {
+			reject(api.apiHelper.buildResponseMessage(400, "Falha ao adicionar orçamento"));
+		})
+	})
+}
 
 function updateBudgetRequest(id, status) {
 	return new Promise((resolve, reject) => {

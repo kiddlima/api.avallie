@@ -6,6 +6,7 @@ controller.addBudgetRequest = addBudgetRequest;
 controller.getBudgetRequests = getBudgetRequests;
 controller.updateBudgetRequest =updateBudgetRequest;
 controller.updateSupplierStatus = updateSupplierStatus;
+controller.updateProductBudget = updateProductBudget;
 
 module.exports = controller;
 
@@ -19,6 +20,19 @@ function addBudgetRequest(req, res, next){
         res.status(400);
         res.json(err)
     })
+}
+
+function updateProductBudget(req, res, next){
+    budgetRequestService.updateProductBudget(req.body.budgetRequestId, req.body.supplierId, req.body.productId, req.body.brand, req.body.price, req.body.observation)
+    .then((response) => {
+        res.status(200);
+        res.json(response);
+    })
+    .catch((err) => {
+        res.status(400);
+        res.json(err);
+    })
+
 }
 
 function getBudgetRequests(req, res, next){
