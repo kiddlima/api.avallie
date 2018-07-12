@@ -22,7 +22,6 @@ let budgetRequest = new mongoose.Schema({
             categories: [String],
             products: [
                 {
-                    _id: {type: String, required: [true, 'Id' + requiredMessage]},
                     name: {type: String, required: [true, 'Nome' + requiredMessage]},
                     category: {type: String, required: [true, 'Categoria' + requiredMessage]},
                     unity: {type: String},
@@ -55,7 +54,8 @@ let budgetRequest = new mongoose.Schema({
     deadLine: {type: Date, required: [true, 'Prazo de entrega', requiredMessage]},
 }, {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
+    usePushEach: true
 });
 
 module.exports = mongoose.model('BudgetRequest', budgetRequest);

@@ -29,6 +29,8 @@ router.get('/getAllCategories', categoryController.getAllCategories);
 router.post('/addBudgetRequest', budgetRequestController.addBudgetRequest);
 router.get('/getBudgetRequests', budgetRequestController.getBudgetRequests);
 router.patch("/updateBudgetRequest/:id", budgetRequestController.updateBudgetRequest);
+router.patch("/updateSupplierStatus", budgetRequestController.updateSupplierStatus);
+router.put("/updateProductBudget", budgetRequestController.updateProductBudget);
 
 //AUTH
 router.post("/admin/login", (req, res, next) => {
