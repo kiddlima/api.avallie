@@ -1,5 +1,4 @@
 const supplierService = require('.././service/supplier.service');
-const daoCategory = require('.././dao/category.dao');
 const appHelper = require('.././helper/api.helper');
 
 let controller = {}

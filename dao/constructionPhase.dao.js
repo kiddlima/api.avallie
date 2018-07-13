@@ -1,18 +1,18 @@
-const Category = require('../schema/category.schema');
+const ConstructionPhase = require('../schema/constructionPhase.schema');
 const Promise = require('promise');
 
 let dao = {};
 
-dao.getCategoryById = getCategoryById;
-dao.addCategory = addCategory;
-dao.getCategoryByName = getCategoryByName;
-dao.getAllCategories = getAllCategories;
+dao.getPhaseById = getPhaseById;
+dao.addConstructionPhases = addConstructionPhases;
+dao.getPhaseByName = getPhaseByName;
+dao.getAllPhases = getAllPhases;
 
 module.exports = dao;
 
-function addCategory(category){
+function addConstructionPhases(phases){
     return new Promise((resolve, reject) => {
-        Category.create(category)
+        ConstructionPhase.insertMany(phases)
         .then((response) => {
             resolve();
         })
@@ -22,16 +22,16 @@ function addCategory(category){
     })
 }
 
-function getCategoryByName(name){
+function getPhaseByName(name){
     return new Promise((resolve, reject) => {
-        Category.findOne({
+        ConstructionPhase.findOne({
             "name":  name
         })
-        .then((category) => {
-            if(category){
-                resolve(category);
+        .then((phase) => {
+            if(phase){
+                resolve(phase);
             } else {
-                reject("Categoria não encontrada " + name);
+                reject("Fase não encontrada " + name);
             }
             
         })
@@ -41,9 +41,9 @@ function getCategoryByName(name){
     })
 }
 
-function getCategoryById(id){
+function getPhaseById(id){
     return new Promise((resolve, reject) => {
-        Category.findOne({
+        ConstructionPhase.findOne({
             "_id": id
         })
         .then((response) => {
@@ -55,9 +55,9 @@ function getCategoryById(id){
     })
 }
 
-function getAllCategories(){
+function getAllPhases(){
     return new Promise((resolve, reject) => {
-        Category.find({})
+        ConstructionPhase.find({})
         .then((response) => {
             resolve(response);
         })

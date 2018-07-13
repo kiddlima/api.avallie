@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supplierController = require('.././controller/supplier.controller');
-const categoryController = require('.././controller/category.controller');
+const constructionPhaseController = require('.././controller/constructionPhase.controller');
 const productController = require('.././controller/product.controller');
 const budgetRequestController = require('.././controller/budgetRequest.controller');
 
@@ -19,11 +19,11 @@ router.post('/addSuppliers', supplierController.addSuppliers);
 router.post('/addProducts', productController.addProducts);
 router.post('/getProducts', productController.getProducts);
 
-//CATEGORIES
+//CONSTRUCTION PHASES
 // ROTAS COMENTADAS POR SEGURANCA
-router.post('/addcategories', categoryController.addCategories);
-router.get('/getCategory/:category', categoryController.getCategoryByName);
-router.get('/getAllCategories', categoryController.getAllCategories);
+router.post('/addPhases', constructionPhaseController.addPhases);
+router.get('/getPhase/:phase', constructionPhaseController.getPhaseByName);
+router.get('/getAllPhases', constructionPhaseController.getAllPhases);
 
 //BUDGET REQUEST
 router.post('/addBudgetRequest', budgetRequestController.addBudgetRequest);
