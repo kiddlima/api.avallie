@@ -10,7 +10,7 @@ config.environment = process.env.NODE_ENV || 'development';
 config.seedDB = false;
 
 config.server = {
-  host: process.env.IP || 'localhost'
+  host: process.env.IP || 'production'
 };
 
 // MongoDB configurações
