@@ -2,7 +2,7 @@
 
 let logger   = require('mm-node-logger')(module);
 let mongoose = require('mongoose');
-let config   = require('./config');
+let config   = require('./config.js');
 
 function createMongooseConnection(cb) {
   // Cria a conexão do BD
