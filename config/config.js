@@ -15,6 +15,7 @@ config.server = {
 
 // MongoDB configurações
 if (config.environment === 'development') {
+  console.log("entrou em dev")
   config.server = {
     port: process.env.PORT || 3000
   };
