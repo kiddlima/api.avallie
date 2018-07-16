@@ -22,6 +22,7 @@ if (config.environment === 'development') {
     dbURI: 'mongodb://localhost:27017/avallie'         
   };  
 } else if(config.environment === 'production'){
+  console.log("entrou em prod")
   config.server = {
     port: process.env.PORT || 3000
   };
