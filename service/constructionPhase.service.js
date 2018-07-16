@@ -1,20 +1,20 @@
 const Promise = require('promise');
-const dao = require('../dao/category.dao');
+const dao = require('../dao/constructionPhase.dao');
 const apiHelper = require('../helper/api.helper')
 
 let service = {};
 
-service.getCategoryByName = getCategoryByName;
-service.addCategory = addCategory;
-service.getAllCategories = getAllCategories;
+service.getPhaseByName = getPhaseByName;
+service.addPhases = addPhases;
+service.getAllPhases = getAllPhases;
 
 module.exports = service;
 
-function addCategory(category){
+function addPhases(phases){
     return new Promise((resolve, reject) => {
-        dao.addCategory(category)
-        .then(() => {
-            resolve(apiHelper.buildResponseMessage(200, "Categoria cadastrada com sucesso"))
+        dao.addConstructionPhases(phases)
+        .then((result) => {
+            resolve(apiHelper.buildResponseMessage(200, "Fases cadastradas com sucesso"))
         })
         .catch((err) => {
             let error = err.errors;
@@ -23,11 +23,11 @@ function addCategory(category){
     })
 }
 
-function getCategoryByName(name){
+function getPhaseByName(name){
     return new Promise((resolve, reject) => {
-        dao.getCategoryByName(name)
-        .then((category) => {
-            resolve(category);
+        dao.getPhaseByName(name)
+        .then((phase) => {
+            resolve(phase);
         })
         .catch((err)=> {
             reject(apiHelper.buildResponseMessage(400, err));
@@ -35,11 +35,11 @@ function getCategoryByName(name){
     })
 }
 
-function getAllCategories(){
+function getAllPhases(){
     return new Promise((resolve, reject) => {
-        dao.getAllCategories()
-        .then((categories) => {
-            resolve(categories);
+        dao.getAllPhases()
+        .then((phases) => {
+            resolve(phases);
         })
         .catch((err) => {
             reject(apiHelper.buildResponseMessage(400, err));

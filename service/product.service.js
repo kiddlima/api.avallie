@@ -1,7 +1,6 @@
 const Product = require('../schema/product.schema');
 const Promise = require('promise');
 const dao = require('../dao/product.dao');
-const daoCategory = require('../dao/category.dao');
 const appHelper = require('../helper/api.helper')
 
 let service = {};

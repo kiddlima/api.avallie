@@ -1,5 +1,4 @@
 const productService = require('.././service/product.service');
-const daoCategory = require('.././dao/category.dao');
 
 let controller = {}
 
