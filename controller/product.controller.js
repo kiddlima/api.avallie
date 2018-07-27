@@ -28,7 +28,7 @@ function addProducts(req, res, next){
 }
 
 function getProducts(req, res, next){
-    productService.getProducts()
+    productService.getProducts(req.body)
     .then((products) => {
         res.json(products);
     })
