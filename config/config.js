@@ -4,13 +4,13 @@ let config = {};
 
 //quando servidor for pra producao ou hml trocar variavel abaixo para production
 //quando servidor for local, usar development
-config.environment = process.env.NODE_ENV || 'homolog';
+config.environment = process.env.NODE_ENV || 'production';
 
 // Preencher o BD com amostras, se for necessário
 config.seedDB = false;
 
 config.server = {
-  host: process.env.IP || 'homolog'
+  host: process.env.IP || 'production'
 };
 
 // MongoDB configurações
