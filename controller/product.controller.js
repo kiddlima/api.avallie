@@ -28,6 +28,7 @@ function addProducts(req, res, next){
 }
 
 function getProducts(req, res, next){
+    console.log("chamou o getProducts: " + req.body)
     productService.getProducts(req.body)
     .then((products) => {
         res.json(products);
