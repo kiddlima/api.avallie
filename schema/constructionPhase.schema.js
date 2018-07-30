@@ -4,7 +4,8 @@ const requiredMessage = " é obrigatório";
 
 let constructionPhase = new mongoose.Schema({
     name: {type: String, required: [true, 'Nome da fase de obra' + requiredMessage], unique: true},
-    categories: {type: [String], required: ['Categoria']}
+    categories: {type: [String], required: ['Categoria']},
+    icon: String
 }, {versionKey: false});
 
 module.exports = mongoose.model('ConstructionPhase', constructionPhase);
