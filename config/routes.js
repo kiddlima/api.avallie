@@ -4,6 +4,7 @@ const supplierController = require('.././controller/supplier.controller');
 const constructionPhaseController = require('.././controller/constructionPhase.controller');
 const productController = require('.././controller/product.controller');
 const budgetRequestController = require('.././controller/budgetRequest.controller');
+const authController = require('.././controller/auth.controller')
 
 router.get('/',function(req, res){
   res.send("Hello World!");
@@ -33,32 +34,7 @@ router.patch("/updateSupplierStatus", budgetRequestController.updateSupplierStat
 router.put("/updateProductBudget", budgetRequestController.updateProductBudget);
 
 //AUTH
-router.post("/admin/login", (req, res, next) => {
-  switch(req.body.password){
-    case("allanAvallieAdmin"):
-      res.status(200);
-      res.json({name: "Allan"})
-      break;
-    case("caueAvallieAdmin"):
-      res.status(200);
-      res.json({name: "Caue"})
-      break;
-    case("joaoAvallieAdmin"):
-      res.status(200);
-      res.json({name: "Joao"})
-      break;
-    case("viniAvallieAdmin"):
-      res.status(200);
-      res.json({name: "Vinicius"})
-      break;
-    case("cassiAvallieAdmin"):
-      res.status(200);
-      res.json({name: "Cassiano"})
-      break;
-    default:
-      res.status(400);
-      res.json(false);
-  }
-})
+router.post('/register/supplier', authController.registerSupplier);
+router.post('/authenticate/supplier', authController.authenticateSupplier)
 
 module.exports = router;

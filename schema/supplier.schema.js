@@ -3,18 +3,28 @@ const mongoose = require('mongoose');
 const requiredMessage = ' é obrigatório.';
 
 let supplier = new mongoose.Schema({
+    emails: {
+        type: [String], 
+        required: [true, 'Email' + requiredMessage]
+    },
+    password: {
+        type: String,
+        required: true
+    },
     cnpj: String,
     socialReason : String,
     fantasyName: String,
     responsable: String,
     phones: [String],
-    emails: {type: [String], required: [true, 'Email' + requiredMessage]},
     city: [String],
     state: [String],
     cep: [String],
     address: [String],
     urls: [String],
-    categories: {type: [String], required: [true, 'Categoria' + requiredMessage]},
+    categories: {
+        type: [String], 
+        required: [true, 'Categoria' + requiredMessage]
+    },
     budgetRequests: [{
         budgetRequest_id: String,
         user:{
@@ -31,9 +41,18 @@ let supplier = new mongoose.Schema({
         deadLine: Date,
         products:[
             {
-                _id: {type: String, required: [true, 'Id' + requiredMessage]},
-                name: {type: String, required: [true, 'Nome' + requiredMessage]},
-                category: {type: String, required: [true, 'Categoria' + requiredMessage]},
+                _id: {
+                    type: String, 
+                    required: [true, 'Id' + requiredMessage]
+                },
+                name: {
+                    type: String, 
+                    required: [true, 'Nome' + requiredMessage]
+                },
+                category: {
+                    type: String, 
+                    required: [true, 'Categoria' + requiredMessage]
+                },
                 unity: {type: String},
                 amount: Number,
                 manufacturer: String,
