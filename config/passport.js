@@ -7,7 +7,7 @@ module.exports = function (passport){
     options.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
     options.secretOrKey = 'teste';
     passport.use(new JwtStrategy(options, (jwtPayload, done) => {
-        Supplier.getUserById(jwtPayload._doc._id, (err, supplier) => {
+        Supplier.getSupplierById(jwtPayload._id, (err, supplier) => {
             if(err){
                 return done(err, false);
             }

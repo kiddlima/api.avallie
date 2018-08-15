@@ -4,7 +4,8 @@ const supplierController = require('.././controller/supplier.controller');
 const constructionPhaseController = require('.././controller/constructionPhase.controller');
 const productController = require('.././controller/product.controller');
 const budgetRequestController = require('.././controller/budgetRequest.controller');
-const authController = require('.././controller/auth.controller')
+const authController = require('.././controller/auth.controller');
+const passport = require('passport');
 
 router.get('/',function(req, res){
   res.send("Hello World!");
@@ -18,6 +19,7 @@ router.post('/addSuppliers', supplierController.addSuppliers);
 //PRODUTCS
 // ROTAS COMENTADAS POR SEGURANCA
 router.post('/addProducts', productController.addProducts);
+/* router.post('/getProducts', passport.authenticate('jwt', {'session': false}), productController.getProducts); */
 router.post('/getProducts', productController.getProducts);
 
 //CONSTRUCTION PHASES
@@ -35,6 +37,6 @@ router.put("/updateProductBudget", budgetRequestController.updateProductBudget);
 
 //AUTH
 router.post('/register/supplier', authController.registerSupplier);
-router.post('/authenticate/supplier', authController.authenticateSupplier)
+router.post('/authenticate/supplier', authController.authenticateSupplier);
 
 module.exports = router;

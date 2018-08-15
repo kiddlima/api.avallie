@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const requiredMessage = ' é obrigatório.';
 
 let supplier = new mongoose.Schema({
-    emails: {
-        type: [String], 
+    email: {
+        type: String, 
         required: [true, 'Email' + requiredMessage]
     },
     password: {
@@ -65,4 +65,9 @@ let supplier = new mongoose.Schema({
     toObject: {virtuals: true}
 });
 
-module.exports = mongoose.model('Supplier', supplier);
+const Supplier = module.exports = mongoose.model('Supplier', supplier);
+
+module.exports.getSupplierById = function(id, callback){
+    Supplier.findById(id, callback);
+}
+

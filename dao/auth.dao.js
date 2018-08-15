@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 let dao = {};
 
 dao.registerSupplier = registerSupplier;
+dao.getSupplierByEmail = getSupplierByEmail;
+dao.comparePasswords = comparePasswords;
 
 module.exports = dao;
 
@@ -27,4 +29,28 @@ function registerSupplier(supplier){
             })
         })
     });
+}
+
+function getSupplierByEmail(email){
+    return new Promise((resolve, reject) => {
+        Supplier.findOne({"email": email})
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
+}
+
+function comparePasswords(password, hash){
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, hash, (err, isMatch) => {
+            if(err){
+                reject(err);
+            } else {
+                resolve(isMatch);
+            }
+        })
+    })
 }

@@ -1,5 +1,6 @@
 const authDao = require('../dao/auth.dao');
 const apiHelper = require('../helper/api.helper');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     registerSupplier: registerSupplier,
@@ -29,5 +30,30 @@ function registerSupplier(supplier){
 }
 
 function authenticateSupplier(credentials){
+    const email = credentials.email;
+    const password = credentials.password;
+
+    return new Promise((resolve, reject) => {
+        authDao.getSupplierByEmail(email)
+        .then((supplier) => {
+            authDao.comparePasswords(password, supplier.password)
+            .then((isMatch) => {
+                if(isMatch){
+                    const token = jwt.sign(supplier.toJSON(), 'teste', {expiresIn: '1h'});
+
+                    resolve({
+                        token: 'JWT ' + token,
+                        email: supplier.email
+                    })
+                }
+            })
+            .catch((err) => {
+                reject(err);
+            })
+        })
+        .catch((err) => {
+            reject(apiHelper.buildResponseMessage(400, "Usuário não cadastrado"));
+        })
+    })
 
 }
