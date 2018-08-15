@@ -1,6 +1,7 @@
 const authDao = require('../dao/auth.dao');
 const apiHelper = require('../helper/api.helper');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 module.exports = {
     registerSupplier: registerSupplier,
@@ -39,7 +40,7 @@ function authenticateSupplier(credentials){
             authDao.comparePasswords(password, supplier.password)
             .then((isMatch) => {
                 if(isMatch){
-                    const token = jwt.sign(supplier.toJSON(), 'teste', {expiresIn: '1h'});
+                    const token = jwt.sign(supplier.toJSON(), fs.readFileSync('./api.key', 'utf8'), {expiresIn: '10h'});
 
                     resolve({
                         token: 'JWT ' + token,
