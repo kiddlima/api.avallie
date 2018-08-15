@@ -5,6 +5,7 @@ let express = require('express'),
     helmet = require('helmet'), // Permite um pouco de segurança a aplicação
     bodyParser = require('body-parser'), // Permite manipular mais facil as requisições
     methodOverride = require('method-override'), // Permite utilizar PUT, DELETE, POST em lugares onde o cliente não os suportam.
+    passport = require('passport');
 
 app = express();
 const SixMonths = 15778476000;
@@ -52,6 +53,13 @@ function initCrossDomain(app) {
   });
 }
 
+function initPassport(){
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  require('./passport')(passport);
+}
+
 // Incia as rotas
 function initRoutes(app) {
   app.use('/', require('./routes'));
@@ -72,6 +80,7 @@ function init() {
   initCrossDomain(app);
   initRoutes(app);
   initDB();
+  initPassport();
   return app;
 }
 
