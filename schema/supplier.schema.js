@@ -9,18 +9,37 @@ let supplier = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: [true, 'Senha' + requiredMessage]
     },
-    cnpj: String,
-    socialReason : String,
-    fantasyName: String,
-    responsable: String,
-    phones: [String],
-    city: [String],
-    state: [String],
-    cep: [String],
-    address: [String],
-    urls: [String],
+    cnpj: {
+        type: String,
+        required: [true, 'CNPJ' + requiredMessage]
+    },
+    supplierName : {
+        type: String,
+        required: [true, 'Nome do fornecedor' + requiredMessage]
+    },
+    phone: {
+        type: [String],
+        required: [true, 'Telefone' + requiredMessage]
+    },
+    city: {
+        type: [String],
+        required: [true, 'Cidade' + requiredMessage]
+    },
+    state: {
+        type: [String],
+        required: [true, 'Estado' + requiredMessage]
+    },
+    cep: {
+        type: [String],
+        required: [true, 'CEP' + requiredMessage]
+    },
+    address: {
+        type: [String],
+        required: [true, 'Endereço' + requiredMessage]
+    },
+    url: [String],
     categories: {
         type: [String], 
         required: [true, 'Categoria' + requiredMessage]
