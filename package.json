@@ -23,7 +23,11 @@
     "nodemailer": "^4.5.0",
     "nodemailer-juice": "^1.0.0",
     "nodemon": "^1.9.2",
+    "passport": "^0.4.0",
+    "passport-jwt": "*",
     "pm2": "^2.6.1",
-    "promise": "^8.0.1"
+    "promise": "^8.0.1",
+    "bcryptjs": "*",
+    "jsonwebtoken": "*"
   }
 }
