@@ -6,6 +6,7 @@ module.exports = {
 };
 
 function registerSupplier(req, res, next){
+    console.log("REGISTER SUPPLIER");
     authService.registerSupplier(req.body)
     .then((result) => {
         res.status(200);
