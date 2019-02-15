@@ -4,18 +4,19 @@ const requiredMessage = ' é obrigatório.';
 
 let supplier = new mongoose.Schema({
     email: {
-        type: String, 
+        type: String,
         required: [true, 'Email' + requiredMessage]
     },
     password: {
         type: String,
-        required: [true, 'Senha' + requiredMessage]
+        required: [true, 'Senha' + requiredMessage],
+        select: false
     },
     cnpj: {
         type: String,
         required: [true, 'CNPJ' + requiredMessage]
     },
-    supplierName : {
+    supplierName: {
         type: String,
         required: [true, 'Nome do fornecedor' + requiredMessage]
     },
@@ -41,12 +42,12 @@ let supplier = new mongoose.Schema({
     },
     url: [String],
     categories: {
-        type: [String], 
+        type: [String],
         required: [true, 'Categoria' + requiredMessage]
     },
     budgetRequests: [{
         budgetRequest_id: String,
-        user:{
+        user: {
             name: String,
             email: String,
             cpf: String,
@@ -58,21 +59,21 @@ let supplier = new mongoose.Schema({
             city: String
         },
         deadLine: Date,
-        products:[
+        products: [
             {
                 _id: {
-                    type: String, 
+                    type: String,
                     required: [true, 'Id' + requiredMessage]
                 },
                 name: {
-                    type: String, 
+                    type: String,
                     required: [true, 'Nome' + requiredMessage]
                 },
                 category: {
-                    type: String, 
+                    type: String,
                     required: [true, 'Categoria' + requiredMessage]
                 },
-                unity: {type: String},
+                unity: { type: String },
                 amount: Number,
                 manufacturer: String,
                 observation: String
@@ -80,13 +81,13 @@ let supplier = new mongoose.Schema({
         ],
     }]
 }, {
-    versionKey: false,
-    toObject: {virtuals: true}
-});
+        versionKey: false,
+        toObject: { virtuals: true }
+    });
 
 const Supplier = module.exports = mongoose.model('Supplier', supplier);
 
-module.exports.getSupplierById = function(id, callback){
+module.exports.getSupplierById = function (id, callback) {
     Supplier.findById(id, callback);
 }
 

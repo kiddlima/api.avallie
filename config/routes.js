@@ -38,5 +38,6 @@ router.put("/updateProductBudget", budgetRequestController.updateProductBudget);
 //AUTH
 router.post('/register/supplier', authController.registerSupplier);
 router.post('/authenticate/supplier', authController.authenticateSupplier);
+router.get('/auth/supplier', supplierController.getSupplier);
 
 module.exports = router;
